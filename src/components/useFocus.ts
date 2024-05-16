@@ -15,11 +15,11 @@
         })
       }
     }
-      const onmousedown = (e:any,block:Block)=>{
+      const onmousedown = (e:any,block:Block,id:String)=>{
         // 阻止默认事件
         e.preventDefault();
         // 阻止事件冒泡
-        e.stopPropagation();
+        // e.stopPropagation();
         console.log(block.focus)
         // block规划一个属性，focus，获取焦点后就将focus变为true
       if(!block.focus){
@@ -30,6 +30,11 @@
       }else{
         block.focus = false
       }
+      blocks.forEach(block=>{
+        if(block.id === id){
+          block.focus = true
+        }
+      })
       callback(e)
       }
 
