@@ -32,34 +32,28 @@
     </ElDialog>
   </div>
 </template>
-
 <script setup>
 import { ElButton, ElInput, ElDialog } from "element-plus";
 import { ref } from "vue";
 import useData from "../stores/data.js"; //useData().state就是data.json的内容
-
 let onShow = ref(false); //控制显示隐藏
 let isShow = () => {
   //   alert(2);
   onShow.value = !onShow.value;
 };
-
 //点击取消
 let onCancle = () => {
   onShow.value = false;
 };
 //点击确定
-
 let onConfirm = () => {
   onShow.value = false;
   //将当前内容转化出来
   useData().state = content; //不知道是不是content
 };
-
 //data导出的内容
 let content = ref(null);
 content.value = JSON.stringify(useData().state);
-
 //按钮
 let button = [
   //   { label: "Pre", icon: "icon-back", handle: () => commands.undo() },
@@ -113,7 +107,6 @@ let button = [
       //       //那这里就可以拿到那个json,直接渲染到页面就好了
       //       //然后就是更新data
       //       useData().state = JSON.parse(text); //这样去更改无法保留历史记录，那我们就需要去注册一个能放到队列的方法
-
       //       //由于前进后退没做好，所以下面好像不起作用，等前面完成后再完善
       //       // commands.updateContainer(JSON.parse(text)); //更新的时候就调用，把新的传过去
       //     },

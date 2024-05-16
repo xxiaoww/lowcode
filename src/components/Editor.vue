@@ -219,7 +219,16 @@ export default defineComponent({
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
       datas.value,
       (e: any) => {
-        console.log(focusData);
+        console.log(e)
+        let fid = e.target.parentNode.getAttribute('data-id')
+        console.log(fid)
+        // datas.value.exData.blocks.forEach(element => {
+        //   if(element.id === fid && element.body!.length>0){
+        //     let children = element.body!
+        //     children.forEach(e=>e.focus=true)
+        //   }
+        // });
+        console.log(focusData)
         // console.log(e);
         // console.log(e.target)
         //   let event:HTMLElement = e.target as HTMLElement;

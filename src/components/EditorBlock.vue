@@ -13,7 +13,7 @@
     :style="{ flex: '1' }"
     :data-id="block.id"
     :datas="datas"
-    @mousedown.stop="onmousedown($event, block)"
+    @mousedown.stop="onmousedown($event, block, block.id ?? '')"
     ></EditorBlock>
       </div>
   </div>
