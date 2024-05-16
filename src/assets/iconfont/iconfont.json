@@ -1,0 +1,37 @@
+{
+  "id": "4519837",
+  "name": "low-code",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1472506",
+      "name": "方框",
+      "font_class": "fangkuang",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "7038155",
+      "name": "按钮",
+      "font_class": "anniu",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "10352343",
+      "name": "文本",
+      "font_class": "wenben",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "21060059",
+      "name": "m-下拉框",
+      "font_class": "m-xialakuang",
+      "unicode": "e7da",
+      "unicode_decimal": 59354
+    }
+  ]
+}
