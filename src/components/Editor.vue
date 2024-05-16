@@ -19,7 +19,8 @@
           </div>
         </div>
       </div>
-      <div class="editor-top">菜单栏</div>
+      <!-- <div class="editor-top">菜单栏</div> -->
+      <Menu></Menu>
       <div class="editor-right">属性控制栏</div>
       <div class="editor-container">
         <!-- 负责产生滚动条 -->
@@ -42,7 +43,7 @@
               :datas="datas"
               :class="block.focus ? 'editor-block-focus' : ''"
             >
-          </EditorBlock>
+            </EditorBlock>
           </div>
         </div>
       </div>
@@ -67,11 +68,14 @@ import { useFocus } from "./useFocus";
 // 引入
 import { v4 as uuid } from "uuid";
 
+//引入菜单组件
+import Menu from "./Menu.vue";
 // console.log(AppData)
 export default defineComponent({
   name: "Editor",
   components: {
     EditorBlock,
+    Menu,
   },
   props: {
     modelValue: {
@@ -108,14 +112,14 @@ export default defineComponent({
     // 内容的样式
     const containerStyle: ComputedRef<CSSProperties> = computed(() => {
       const { container } = datas.value.exData;
-      console.log(container)
+      console.log(container);
       return {
         width: `${container.width}px`,
         height: `${container.height}px`,
       };
     });
-    console.log(containerStyle.value)
-    console.log(datas.value.exData.blocks)
+    console.log(containerStyle.value);
+    console.log(datas.value.exData.blocks);
 
     // 获取内容的dom元素
     let containerRef = ref<null | HTMLElement>(null);
@@ -141,24 +145,27 @@ export default defineComponent({
       // 阻止默认事件
       e.preventDefault();
       // console.log(currentComponent);
-      let blockBody:Block[]=[]
-      if(currentComponent.value!.body!.length>=1){
-      for(let i = 0;i<currentComponent.value!.body!.length;i++){
-        let r: string = uuid(); 
-        // console.log(currentComponent.value!.body![i].key)
-        // console.log(r)
-        blockBody=[...blockBody,{
-          zIndex: 1,
-            id: r,
-            key: currentComponent.value!.body![i].key,
-            alignCenter: true,
-            focus: false,
-            body:[],
-            props: {},
-        }]
+      let blockBody: Block[] = [];
+      if (currentComponent.value!.body!.length >= 1) {
+        for (let i = 0; i < currentComponent.value!.body!.length; i++) {
+          let r: string = uuid();
+          // console.log(currentComponent.value!.body![i].key)
+          // console.log(r)
+          blockBody = [
+            ...blockBody,
+            {
+              zIndex: 1,
+              id: r,
+              key: currentComponent.value!.body![i].key,
+              alignCenter: true,
+              focus: false,
+              body: [],
+              props: {},
+            },
+          ];
+        }
+        // console.log(blockBody)
       }
-    // console.log(blockBody)
-    }
 
       //随机生成id
       const random: string = uuid();
@@ -175,7 +182,7 @@ export default defineComponent({
             key: currentComponent.value!.key,
             alignCenter: true,
             focus: false,
-            body:blockBody,
+            body: blockBody,
             props: {},
           },
         ],
@@ -198,7 +205,7 @@ export default defineComponent({
 
     // 拖拽结束事件
     const dragEnd = (e: DragEvent, component: componentConfig) => {
-      debugger
+      debugger;
       // console.log(containerRef.value);
       containerRef.value?.removeEventListener("dragenter", dragenter);
       containerRef.value?.removeEventListener("dragover", dragover);
@@ -212,27 +219,27 @@ export default defineComponent({
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
       datas.value,
       (e: any) => {
-        console.log(focusData)
-        // console.log(e); 
+        console.log(focusData);
+        // console.log(e);
         // console.log(e.target)
-      //   let event:HTMLElement = e.target as HTMLElement;
-      //   //获取鼠标位置
-      // let pageX = e.pageX; 
-      // let pageY = e.pageY;
-      // //获取鼠标按下时鼠标在盒子中的位置
-      // let boxX = pageX - event!.offsetLeft;
-      // let boxY = pageY - event!.offsetTop;
-      // document.onmousemove = function (e) {
-      //   //获取鼠标拖拽式在页面上的位置
-      //   let pageXs = e.pageX;
-      //   let pageYs = e.pageY;
-      //   event.style.left = pageXs - boxX + "px";
-      //   event.style.top = pageYs - boxY + "px"; 
-      // };
- 
-      // document.onmouseup = function () {
-      //   document.onmousemove = null;  //删除拖拽事件
-      // };
+        //   let event:HTMLElement = e.target as HTMLElement;
+        //   //获取鼠标位置
+        // let pageX = e.pageX;
+        // let pageY = e.pageY;
+        // //获取鼠标按下时鼠标在盒子中的位置
+        // let boxX = pageX - event!.offsetLeft;
+        // let boxY = pageY - event!.offsetTop;
+        // document.onmousemove = function (e) {
+        //   //获取鼠标拖拽式在页面上的位置
+        //   let pageXs = e.pageX;
+        //   let pageYs = e.pageY;
+        //   event.style.left = pageXs - boxX + "px";
+        //   event.style.top = pageYs - boxY + "px";
+        // };
+
+        // document.onmouseup = function () {
+        //   document.onmousemove = null;  //删除拖拽事件
+        // };
 
         // mousedown(e);
         // console.log(focusData.value.focus);
@@ -241,42 +248,42 @@ export default defineComponent({
         // console.log(focus);
         // const elements = document.querySelectorAll(".editor-block");
         // elements.forEach((block) => {
-          // 获取自定义属性的值
-          // console.log(block);
-          // block.removeEventListener("dragstart");
-          // let dataid: string = block.getAttribute("data-id")!;
-          // block.setAttribute("draggable", "true"); // 启用元素拖动
-          // console.log(dataid);
-          // console.log(typeof block);
-          // if (focusid === dataid) {
-            // console.log(block)
-            // console.log(dataid);
-          //   //           block.addEventListener("dragstart", function($Event) {
-          //   // // // 处理拖动开始时的逻辑
-          //   // //           // e.dataTransfer.setData("text/plain", dataid);
-          //   // $Event.dataTransfer.dropEffect = 'move'
-          //   //           },true);
-          //   //
-          //   // block.addEventListener("dragstart", (event: any) => {
-          //   //   // 设置拖动数据
-            //   console.log(event);
-            //   console.log(block);
-          //   //   debugger;
-            //   console.log(111);
-          //   //   event.dataTransfer.setData("text/plain", "Hello, World!");
+        // 获取自定义属性的值
+        // console.log(block);
+        // block.removeEventListener("dragstart");
+        // let dataid: string = block.getAttribute("data-id")!;
+        // block.setAttribute("draggable", "true"); // 启用元素拖动
+        // console.log(dataid);
+        // console.log(typeof block);
+        // if (focusid === dataid) {
+        // console.log(block)
+        // console.log(dataid);
+        //   //           block.addEventListener("dragstart", function($Event) {
+        //   // // // 处理拖动开始时的逻辑
+        //   // //           // e.dataTransfer.setData("text/plain", dataid);
+        //   // $Event.dataTransfer.dropEffect = 'move'
+        //   //           },true);
+        //   //
+        //   // block.addEventListener("dragstart", (event: any) => {
+        //   //   // 设置拖动数据
+        //   console.log(event);
+        //   console.log(block);
+        //   //   debugger;
+        //   console.log(111);
+        //   //   event.dataTransfer.setData("text/plain", "Hello, World!");
 
-          //   //   // 设置拖动效果为移动
-          //   //   event.dataTransfer.effectAllowed = "move";
-          //   // });
+        //   //   // 设置拖动效果为移动
+        //   //   event.dataTransfer.effectAllowed = "move";
+        //   // });
 
-          //   // block.addEventListener("drag", (event) => {
-          //   //   // 拖拽过程中的逻辑
-          //   // });
+        //   // block.addEventListener("drag", (event) => {
+        //   //   // 拖拽过程中的逻辑
+        //   // });
 
-          //   // block.addEventListener("dragend", (event) => {
-          //   //   // 拖拽结束时的逻辑
-          //   // });
-          // }
+        //   // block.addEventListener("dragend", (event) => {
+        //   //   // 拖拽结束时的逻辑
+        //   // });
+        // }
         // });
       }
     );
@@ -300,7 +307,7 @@ export default defineComponent({
       // let durX = moveX - drags.startX
       // let durY = moveY - drags.startY
       // focusData.value.focus.forEach((block,idx)=>{
-        // console.log(drags.startPos[idx])
+      // console.log(drags.startPos[idx])
       //   block.top = drags.startPos[idx].top+durY
       //   block.left  = drags.startPos[idx].left+durX
       // })
@@ -319,9 +326,7 @@ export default defineComponent({
       // console.log(focusData.value);
     };
 
-      // 组件拖拽
-     
-
+    // 组件拖拽
 
     const mouseup = (e: DragEvent) => {
       document.removeEventListener("dragover", mousemove);
@@ -357,5 +362,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>
