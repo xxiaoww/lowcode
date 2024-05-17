@@ -94,8 +94,9 @@ export default defineComponent({
 
     // 焦点
 
-    let { onmousedown, focusData } = useFocus(useData().state!, (e: any) => {
+    let { onmousedown, focusData } = useFocus((e: any) => {
       console.log(focusData);
+      console.log(useData().state)
     });
 
     return {

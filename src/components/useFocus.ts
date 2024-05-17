@@ -2,10 +2,8 @@
   import { computed } from 'vue'
   import useData from '../stores/data'
   // 清空focus函数
-  export function useFocus(datas: AppData, callback: any) {
-    console.log(datas)
-    let blocks = useData().state.blocks
-    console.log(blocks)
+  export function useFocus(callback: any) {
+
     const clearBlockFocus = (block?: Block[]) => {
       if(block){
         block.forEach((b:Block)=>{
@@ -28,7 +26,7 @@
         // 阻止默认事件
         e.preventDefault();
         // 阻止事件冒泡
-        // e.stopPropagation();
+        e.stopPropagation();
         console.log(block.focus)
         // block规划一个属性，focus，获取焦点后就将focus变为true
       if(!block.focus){
@@ -36,10 +34,12 @@
           // 清空其他人的focus属性
           clearBlockFocus()
         block.focus = true;
+        console.log(block.focus)
+        console.log(useData().state)
       }else{
         block.focus = false
       }
-      blocks.forEach(block=>{
+      useData().state.blocks.forEach(block=>{
         if(block.id === id){
           block.focus = true
         }
@@ -51,7 +51,8 @@
       const focusData = computed(()=>{
         let focus:Block[] = []
         let unfocused:Block[] = []
-      com(blocks,focus,unfocused)
+      com(useData().state.blocks,focus,unfocused)
+      console.log(useData().state.blocks)
         console.log(focus)
         return {focus,unfocused}
       })
@@ -62,7 +63,7 @@
           }else{
             unfocused.push(block)
           }
-          if(block.body && Array.isArray(block.body)){
+          if(block.body!.length>0 && Array.isArray(block.body)){
             com(block.body,focus,unfocused)
           }
         })
