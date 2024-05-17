@@ -78,14 +78,12 @@ import {VNode, RendererNode, RendererElement} from "vue"
     body?:any[],
   }
 export interface AppData {
-    exData: {
       container: {
         width: string;
         height: string;
       };
       blocks: Block[];
     };
-  }
 
 
 export interface componentProps {

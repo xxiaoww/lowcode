@@ -30,11 +30,11 @@
             class="editor-container-content"
             :style="containerStyle"
             ref="containerRef"
-            @mousedown="clearBlockFocus(datas.exData.blocks)"
+            @mousedown="clearBlockFocus(datas.blocks)"
           >
             <!-- 渲染内容 -->
             <EditorBlock
-              v-for="(block, index) in datas.exData.blocks"
+              v-for="(block, index) in datas.blocks"
               :key="index"
               :block="block"
               draggable="true"
@@ -71,6 +71,10 @@ import { v4 as uuid } from "uuid";
 //引入菜单组件
 import Menu from "./Menu.vue";
 // console.log(AppData)
+
+//引入data
+import useData from "../stores/data"; //useData().state就是data.json的内容
+
 export default defineComponent({
   name: "Editor",
   components: {
@@ -111,7 +115,7 @@ export default defineComponent({
 
     // 内容的样式
     const containerStyle: ComputedRef<CSSProperties> = computed(() => {
-      const { container } = datas.value.exData;
+      const { container } = datas.value;
       console.log(container);
       return {
         width: `${container.width}px`,
@@ -119,7 +123,8 @@ export default defineComponent({
       };
     });
     console.log(containerStyle.value);
-    console.log(datas.value.exData.blocks);
+    console.log(datas.value.blocks);
+    console.log(useData().state);
 
     // 获取内容的dom元素
     let containerRef = ref<null | HTMLElement>(null);
@@ -171,9 +176,9 @@ export default defineComponent({
       const random: string = uuid();
       // console.log(random);
       // 置空
-      let blocks: Block[] = datas.value.exData.blocks;
-      datas.value.exData = {
-        ...datas.value.exData,
+      let blocks: Block[] = datas.value.blocks;
+      datas.value = {
+        ...datas.value,
         blocks: [
           ...blocks,
           {
@@ -219,16 +224,16 @@ export default defineComponent({
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
       datas.value,
       (e: any) => {
-        console.log(e)
-        let fid = e.target.parentNode.getAttribute('data-id')
-        console.log(fid)
+        console.log(e);
+        let fid = e.target.parentNode.getAttribute("data-id");
+        console.log(fid);
         // datas.value.exData.blocks.forEach(element => {
         //   if(element.id === fid && element.body!.length>0){
         //     let children = element.body!
         //     children.forEach(e=>e.focus=true)
         //   }
         // });
-        console.log(focusData)
+        console.log(focusData);
         // console.log(e);
         // console.log(e.target)
         //   let event:HTMLElement = e.target as HTMLElement;

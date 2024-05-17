@@ -3,7 +3,7 @@
   // 清空focus函数
   export function useFocus(datas: AppData, callback: any) {
     console.log(datas)
-    let blocks = datas.exData.blocks
+    let blocks = datas.blocks
     console.log(blocks)
     const clearBlockFocus = (blocks: Block[] | undefined) => {
       if (blocks) {

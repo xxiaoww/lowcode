@@ -23,7 +23,7 @@
 <script setup>
 import { ElButton, ElInput, ElDialog } from "element-plus";
 import { ref } from "vue";
-import useData from "../stores/data.js"; //useData().state就是data.json的内容
+import useData from "../stores/data.ts"; //useData().state就是data.json的内容
 
 let onShow = ref(false); //控制显示隐藏
 let isShow = () => {

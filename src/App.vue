@@ -18,16 +18,18 @@ export default defineComponent({
   setup() {
     // 将组件的配置直接传入
     provide("config", config);
-    const datas: Ref<AppData> = ref({
-      exData: data,
-    });
-    watch(
-      () => datas.value,
-      (newValue, oldValue) => {
-        console.log("datas updated:", newValue, oldValue);
-      },
-      { deep: true }
-    );
+    // const datas: Ref<AppData> = ref({
+    //   data
+    // });
+    const datas = ref(data);
+    // watch(
+    //   () => datas.value,
+    //   (newValue, oldValue) => {
+    //     console.log("datas updated:", newValue, oldValue);
+    //   },
+    //   { deep: true }
+    // );
+
     // console.log(datas.value)
     provide("config", config);
     return {
