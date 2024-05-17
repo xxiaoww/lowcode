@@ -12,7 +12,6 @@
     :class="block.focus ? 'editor-block-focus' : ''" 
     :style="{ flex: '1' }"
     :data-id="block.id"
-    :datas="datas"
     @mousedown.stop="onmousedown($event, block, block.id ?? '')"
     ></EditorBlock>
       </div>
@@ -32,6 +31,7 @@ import { Block,AppData } from  "../../types/global";
 import "./editor.less";
 import { RegisterConfig } from "../../types/global";
 import { useFocus } from "./useFocus";
+import useData from "../stores/data"; //useData().state就是data.json的内容
 
 export default defineComponent({
   name: "EditorBlock",
@@ -40,14 +40,14 @@ export default defineComponent({
     block: {
       type: Object as () => Block,
     },
-    datas:{
-      type: Object as () => AppData
-    }
+    // datas:{
+    //   type: Object as () => AppData
+    // }
   },
   setup(props) {
-    let datas = props.datas
-    console.log(props.datas);
-    console.log(datas)
+    // let datas = props.datas
+    // console.log(props.datas);
+    console.log(useData().state)
     // 获取组件
     const config = inject<RegisterConfig>("config");
     // console.log(config);
@@ -91,7 +91,7 @@ export default defineComponent({
     
 
     let { onmousedown,focusData} = useFocus(
-      datas!,
+      useData().state!,
       (e: any) => {
         console.log(focusData)
 
@@ -103,7 +103,7 @@ export default defineComponent({
       block,
       blockBody,
       data,
-      datas,
+      useData,
       blockStyles,
       component,
       onmousedown,
