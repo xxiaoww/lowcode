@@ -24,6 +24,18 @@ import { ElButton, ElInput, ElDialog } from "element-plus";
 import { computed, ref } from "vue";
 import useData from "../stores/data.ts"; //useData().state就是data.json的内容
 
+//data导出的内容
+// let content = ref(null);
+// content.value = JSON.stringify(useData().state);
+
+//上面那样可能是 只赋值了一次，用下面计算属性就解决了，
+let content = computed(() => {
+  return JSON.stringify(useData().state);
+});
+
+//导入的内容
+let content2 = ref("");
+
 let onShow = ref(false); //控制显示隐藏
 let isShow = () => {
   //   alert(2);
@@ -45,19 +57,14 @@ let onCancle = () => {
 let onConfirm = () => {
   onShow2.value = false;
   //将当前内容转化出来
-  useData().state = content2.value; //不知道是不是content
+  // useData().state = content2.value; //原来这样写是错的（不能直接将字符串赋值给 useData().state，因为 useData().state 期望的是一个对象，而 content2.value 是一个字符串。因此，你需要先将字符串解析为一个对象，然后再赋值给 useData().state。
+
+  //有个buG:输入如果是空的 会报错
+  useData().state = JSON.parse(content2.value);
+  console.log(useData().state);
+  //赋值后再清空
+  content2.value = "";
 };
-//data导出的内容
-// let content = ref(null);
-// content.value = JSON.stringify(useData().state);
-
-//上面那样可能是 只赋值了一次，用下面计算属性就解决了，
-let content = computed(() => {
-  return JSON.stringify(useData().state);
-});
-
-//导入的内容
-let content2 = ref("yruytiu");
 
 //1111111
 // const state = reactive({
