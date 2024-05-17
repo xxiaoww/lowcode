@@ -34,16 +34,14 @@
           >
             <!-- 渲染内容 -->
             <EditorBlock
-              v-for="(block, index) in data.blocks"
+              v-for="(block, index) in state.blocks"
               :key="index"
               :block="block"
               draggable="true"
               :data-id="block.id"
-              @mousedown="onmousedown($event, block)"
-              :data="data"
-              :class="block.focus ? 'editor-block-focus' : ''"
-            >
-            </EditorBlock>
+              @mousedown="onmousedown($event, block,block.id ?? '')"
+              :class="block.focus ? 'editor-block-focus' : ''"></EditorBlock>
+          
           </div>
         </div>
       </div>
@@ -93,10 +91,9 @@ export default defineComponent({
     // console.log(props.modelValue);
     // const data = ref<AppData>(props.modelValue);
     // console.log(data.value)
-
     //data
-    let data = useData().state;
-    console.log(data);
+    // let data = useData().state;
+    // console.log(data);
     // 计算属性
     // const data = computed<AppData>({
     //   get() {
@@ -130,6 +127,16 @@ export default defineComponent({
     console.log(useData().state.blocks);
     console.log(useData().state);
 
+
+    // state替换useData().state，防止报错
+    let state = computed<AppData>({
+      get() {
+        return useData().state;
+      },
+      set(newValue) {
+        context.emit("update:modelValue", deepcopy(newValue));
+      },
+    });
     // 获取内容的dom元素
     let containerRef = ref<null | HTMLElement>(null);
     // 拖拽事件
@@ -150,6 +157,8 @@ export default defineComponent({
     let currentComponent = ref<null | componentConfig>(null);
 
     // 松手的时候
+
+    let data = useData().state
     const drop = (e: DragEvent) => {
       // 阻止默认事件
       e.preventDefault();
@@ -173,7 +182,7 @@ export default defineComponent({
             },
           ];
         }
-        // console.log(blockBody)
+        console.log(blockBody)
       }
 
       //随机生成id
@@ -189,18 +198,20 @@ export default defineComponent({
         ...useData().state,
         blocks: [
           ...blocks,
-          // {
-          //   zIndex: 1,
-          //   id: random,
-          //   key: currentComponent.value!.key,
-          //   alignCenter: true,
-          //   focus: false,
-          //   body: blockBody,
-          //   props: {},
-          // },
+          {
+            zIndex: 1,
+            id: random,
+            key: currentComponent.value!.key,
+            alignCenter: true,
+            focus: false,
+            body: blockBody,
+            props: {},
+          },
         ],
       };
       currentComponent.value = null;
+      console.log(useData().state);
+      data = useData().state
       // console.log(useData().state);
     };
     // 拖拽开始事件
@@ -371,6 +382,8 @@ export default defineComponent({
     // 3.实现容器内元素的拖拽功能
 
     return {
+      state,
+      useData,//把useData放到return里，才可以在template的dom元素中使用
       data,
       containerStyle,
       config,
