@@ -4,12 +4,12 @@ import 'element-plus/theme-chalk/index.css'
 import './assets/iconfont/iconfont.css'
 
 
-//pinia
-import { createPinia } from 'pinia' 
-const pinia = createPinia()
+
  
 const app = createApp(App)
- 
+ //pinia
+import { createPinia } from 'pinia' 
+const pinia = createPinia()
 //pinia
 app.use(pinia)
 app.mount('#app')

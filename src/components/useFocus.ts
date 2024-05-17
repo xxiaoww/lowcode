@@ -1,17 +1,18 @@
   import {Block,AppData} from '../../types/global'
   import { computed } from 'vue'
+  import useData from '../stores/data'
   // 清空focus函数
   export function useFocus(datas: AppData, callback: any) {
     console.log(datas)
-    let blocks = datas.exData.blocks
+    let blocks = useData().state.blocks
     console.log(blocks)
-    const clearBlockFocus = (blocks: Block[] | undefined) => {
-      if (blocks) {
-        blocks.forEach((block: Block) => {
+    const clearBlockFocus = () => {
+      if (useData().state.blocks) {
+        useData().state.blocks.forEach((block: Block) => {
           block.focus = false
-          if (block.body && Array.isArray(block.body)) {
-            clearBlockFocus(block.body)
-          }
+          // if (block.body && Array.isArray(block.body)) {
+          //   clearBlockFocus(block.body)
+          // }
         })
       }
     }
@@ -25,7 +26,7 @@
       if(!block.focus){
         console.log(block)
           // 清空其他人的focus属性
-          clearBlockFocus(blocks)
+          clearBlockFocus()
         block.focus = true;
       }else{
         block.focus = false
