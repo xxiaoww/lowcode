@@ -241,17 +241,19 @@ export default defineComponent({
     // 2.实现获取焦点，选中功能
     // console.log(data);
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
-      useData().state,
       (e: any) => {
         console.log(e);
         let fid = e.target.parentNode.getAttribute("data-id");
         console.log(fid);
-        // data.exData.blocks.forEach(element => {
-        //   if(element.id === fid && element.body!.length>0){
-        //     let children = element.body!
-        //     children.forEach(e=>e.focus=true)
-        //   }
-        // });
+        console.log(useData().state)
+        console.log(state)
+        useData().state.blocks.forEach(element => {
+          if(element.id === fid){
+            element.focus = true
+            // let children = element.body!
+            // children.forEach(e=>e.focus=true)
+          }
+        });
         console.log(focusData);
         // console.log(e);
         // console.log(e.target)
