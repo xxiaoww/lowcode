@@ -1,9 +1,12 @@
 import { defineStore } from "pinia";
 import data from "../data.json";
+import {
+  AppData,
+} from "../../types/global";
 
 const useData = defineStore("containerRef", {
   state: () => ({
-    state: data, //数据
+    state: data as AppData, //数据
   }),
 
   getters: {},

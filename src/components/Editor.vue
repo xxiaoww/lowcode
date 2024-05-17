@@ -30,17 +30,17 @@
             class="editor-container-content"
             :style="containerStyle"
             ref="containerRef"
-            @mousedown="clearBlockFocus(datas.blocks)"
+            @mousedown="clearBlockFocus()"
           >
             <!-- 渲染内容 -->
             <EditorBlock
-              v-for="(block, index) in datas.blocks"
+              v-for="(block, index) in data.blocks"
               :key="index"
               :block="block"
               draggable="true"
               :data-id="block.id"
               @mousedown="onmousedown($event, block)"
-              :datas="datas"
+              :data="data"
               :class="block.focus ? 'editor-block-focus' : ''"
             >
             </EditorBlock>
@@ -94,28 +94,32 @@ export default defineComponent({
     // const data = ref<AppData>(props.modelValue);
     // console.log(data.value)
 
+    //data
+    let data = useData().state;
+    console.log(data);
     // 计算属性
-    const datas = computed<AppData>({
-      get() {
-        return props.modelValue;
-      },
-      set(newValue) {
-        context.emit("update:modelValue", deepcopy(newValue));
-      },
-    });
-    // const datas = ref(props.modelValue);
-    // console.log(datas.value);
-    watch(
-      () => datas.value,
-      (newValue, oldValue) => {
-        // console.log("datas.value updated:", newValue, oldValue);
-      },
-      { deep: true }
-    );
+    // const data = computed<AppData>({
+    //   get() {
+    //     return props.modelValue;
+    //   },
+    //   set(newValue) {
+    //     context.emit("update:modelValue", deepcopy(newValue));
+    //   },
+    // });
+    // const data = ref(props.modelValue);
+    // console.log(data);
+
+    // watch(
+    //   () => data,
+    //   (newValue, oldValue) => {
+    //     // console.log("data updated:", newValue, oldValue);
+    //   },
+    //   { deep: true }
+    // );
 
     // 内容的样式
     const containerStyle: ComputedRef<CSSProperties> = computed(() => {
-      const { container } = datas.value;
+      const { container } = useData().state;
       console.log(container);
       return {
         width: `${container.width}px`,
@@ -123,7 +127,7 @@ export default defineComponent({
       };
     });
     console.log(containerStyle.value);
-    console.log(datas.value.blocks);
+    console.log(useData().state.blocks);
     console.log(useData().state);
 
     // 获取内容的dom元素
@@ -176,24 +180,28 @@ export default defineComponent({
       const random: string = uuid();
       // console.log(random);
       // 置空
-      let blocks: Block[] = datas.value.blocks;
-      datas.value = {
-        ...datas.value,
+      let blocks = useData().state.blocks as Block[];
+      console.log(useData().state);
+      console.log(useData().state.blocks);
+      console.log(typeof blocks); //object
+
+      useData().state = {
+        ...useData().state,
         blocks: [
           ...blocks,
-          {
-            zIndex: 1,
-            id: random,
-            key: currentComponent.value!.key,
-            alignCenter: true,
-            focus: false,
-            body: blockBody,
-            props: {},
-          },
+          // {
+          //   zIndex: 1,
+          //   id: random,
+          //   key: currentComponent.value!.key,
+          //   alignCenter: true,
+          //   focus: false,
+          //   body: blockBody,
+          //   props: {},
+          // },
         ],
       };
       currentComponent.value = null;
-      // console.log(datas);
+      // console.log(useData().state);
     };
     // 拖拽开始事件
     const dragStart = (e: DragEvent, component: componentConfig | null) => {
@@ -216,18 +224,18 @@ export default defineComponent({
       containerRef.value?.removeEventListener("dragover", dragover);
       containerRef.value?.removeEventListener("dragleave", dragleave);
       containerRef.value?.removeEventListener("drop", drop);
-      // console.log(datas.value);
+      // console.log(data);
     };
 
     // 2.实现获取焦点，选中功能
-    // console.log(datas);
+    // console.log(data);
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
-      datas.value,
+      useData().state,
       (e: any) => {
         console.log(e);
         let fid = e.target.parentNode.getAttribute("data-id");
         console.log(fid);
-        // datas.value.exData.blocks.forEach(element => {
+        // data.exData.blocks.forEach(element => {
         //   if(element.id === fid && element.body!.length>0){
         //     let children = element.body!
         //     children.forEach(e=>e.focus=true)
@@ -363,7 +371,7 @@ export default defineComponent({
     // 3.实现容器内元素的拖拽功能
 
     return {
-      datas,
+      data,
       containerStyle,
       config,
       containerRef,
