@@ -6,13 +6,21 @@
     console.log(datas)
     let blocks = useData().state.blocks
     console.log(blocks)
-    const clearBlockFocus = () => {
-      if (useData().state.blocks) {
+    const clearBlockFocus = (block?: Block[]) => {
+      if(block){
+        block.forEach((b:Block)=>{
+          b.focus = false
+          if (b.body && Array.isArray(b.body)) {
+            clearBlockFocus(b.body)
+          }
+        })
+      }
+     else if(useData().state.blocks) {
         useData().state.blocks.forEach((block: Block) => {
           block.focus = false
-          // if (block.body && Array.isArray(block.body)) {
-          //   clearBlockFocus(block.body)
-          // }
+          if (block.body && Array.isArray(block.body)) {
+            clearBlockFocus(block.body)
+          }
         })
       }
     }
