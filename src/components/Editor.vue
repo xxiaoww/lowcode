@@ -10,6 +10,7 @@
             draggable="true"
             class="editor-left-item"
             v-for="(item, index) in config?.componentList"
+            @click="editorClick(item,focusData)"
             :key="index"
             @dragstart="dragStart($event, item)"
             @dragend="dragEnd($event, item)"
@@ -158,7 +159,6 @@ export default defineComponent({
 
     // 松手的时候
 
-    let data = useData().state
     const drop = (e: DragEvent) => {
       // 阻止默认事件
       e.preventDefault();
@@ -211,7 +211,6 @@ export default defineComponent({
       };
       currentComponent.value = null;
       console.log(useData().state);
-      data = useData().state
       // console.log(useData().state);
     };
     // 拖拽开始事件
@@ -322,6 +321,64 @@ export default defineComponent({
         // });
       }
     );
+    
+    
+    // 给左侧组件添加点击事件，
+    // 具体表现为 如果有选中的盒子，则在点击左侧组件后添加在选中盒子添加一个EditorBlock
+    // 如果没有选中的盒子，则在最大的盒子里默认添加组件
+    const editorClick = (component:componentConfig,focusData:any)=>{
+      const focus:Block[] = focusData.focus
+      console.log(focus)
+      if(focus.length!== 0){
+
+      }else{
+        let blockBody: Block[] = [];
+      if (component.body!.length >= 1) {
+        for (let i = 0; i < component!.body!.length; i++) {
+          let r: string = uuid();
+          // console.log(currentComponent.value!.body![i].key)
+          // console.log(r)
+          blockBody = [
+            ...blockBody,
+            {
+              zIndex: 1,
+              id: r,
+              key: component!.body![i].key,
+              alignCenter: true,
+              focus: false,
+              body: [],
+              props: {},
+            },
+          ];
+        }
+      }
+
+        //随机生成id
+      const random: string = uuid();
+      console.log(random);
+      // 置空
+      let blocks = useData().state.blocks as Block[];
+        useData().state = {
+        ...useData().state,
+        blocks: [
+          ...blocks,
+          {
+            zIndex: 1,
+            id: random,
+            key: component!.key,
+            alignCenter: true,
+            focus: false,
+            body: blockBody,
+            props: {},
+          },
+        ],
+      };
+      console.log(useData().state); 
+      }
+
+    }
+    
+    
     // 移动信息
     type dragState = {
       startX: number;
@@ -386,7 +443,6 @@ export default defineComponent({
     return {
       state,
       useData,//把useData放到return里，才可以在template的dom元素中使用
-      data,
       containerStyle,
       config,
       containerRef,
@@ -394,6 +450,8 @@ export default defineComponent({
       dragEnd,
       onmousedown,
       clearBlockFocus,
+      editorClick,
+      focusData
     };
   },
 });
