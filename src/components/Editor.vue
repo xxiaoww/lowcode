@@ -38,6 +38,7 @@
               v-for="(block, index) in state.blocks"
               :key="index"
               :block="block"
+              :keys="block.key"
               draggable="true"
               :data-id="block.id"
               @mousedown="onmousedown($event, block,block.id ?? '')"
@@ -330,7 +331,19 @@ export default defineComponent({
       const focus:Block[] = focusData.focus
       console.log(focus)
       if(focus.length!== 0){
+        // 要分为内容盒子，flex盒子，和普通已知具体标签的盒子
 
+
+        // 1.如果选中的为内容组件
+        if(focus[0].key === "container"){
+          console.log(focus[0].id)
+
+          useData().state.blocks.forEach(block=>{
+            console.log(block.id)
+            lookforId(state,block,focus,component)
+          })
+          console.log(useData().state)
+        }
       }else{
         let blockBody: Block[] = [];
       if (component.body!.length >= 1) {
@@ -376,6 +389,28 @@ export default defineComponent({
       console.log(useData().state); 
       }
 
+    }
+    const lookforId = function(state:any,block:any,focus:any,component:any){
+      if(Array.isArray(block)){
+        block.forEach(b=>{
+          if(b.id === focus[0].id){
+            b.key = component.key
+              // 更新 state.blocks
+              state.value = { ...state.value };
+              console.log(state.value)
+             
+          }
+        })
+      }
+      else if(block.id === focus[0].id){
+              block.key = component.key
+               // 更新 state.blocks
+              state.value = { ...state.value };
+              console.log(state.value)
+              console.log(block.body) 
+      }else if(block.body && block.body.length > 0){
+        lookforId(state,block.body!,focus,component)
+      }
     }
     
     

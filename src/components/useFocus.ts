@@ -3,7 +3,7 @@
   import useData from '../stores/data'
   // 清空focus函数
   export function useFocus(callback: any) {
-
+let blocks = useData().state
     const clearBlockFocus = (block?: Block[]) => {
       if(block){
         block.forEach((b:Block)=>{
