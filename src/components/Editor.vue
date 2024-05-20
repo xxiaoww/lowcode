@@ -461,7 +461,7 @@ export default defineComponent({
     const addbox = function (block: any, component: any) {
       let blockBody: Block[] = [];
       if (component.body!.length >= 1) {
-        for (let i = 0; i < currentComponent.value!.body!.length; i++) {
+        for (let i = 0; i < component.body!.length; i++) {
           let r: string = uuid();
           // console.log(currentComponent.value!.body![i].key)
           // console.log(r)
@@ -470,7 +470,7 @@ export default defineComponent({
             {
               zIndex: 1,
               id: r,
-              key: currentComponent.value!.body![i].key,
+              key: component.body![i].key,
               alignCenter: true,
               focus: false,
               body: [],
