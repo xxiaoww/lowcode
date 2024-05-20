@@ -3,10 +3,11 @@
     <!-- 组件渲染（使用组件的render函数来渲染） -->
     <div class="editor-block-contain" :keys="component.key">
       <component
+      v-if="component.body.length <= 0"
         :is="component.render"
         :key="component.key"
         class="editor-in"
-        v-if="component.body.length <= 0"
+        
       >
       </component>
       <div style="display: flex" v-else>
@@ -65,8 +66,11 @@ export default defineComponent({
       return props.block;
     });
     console.log(block.value!.body);
-    let blockBody: Block[];
-    blockBody = block.value!.body || [];
+    let blockBody = computed(() => {
+      return block.value!.body
+    })
+    // let blockBody: Block[];
+    // blockBody = block.value!.body || [];
     console.log(blockBody);
     let component= computed(()=>{
       const componentKeys = Object.keys(config!.componentMap);
