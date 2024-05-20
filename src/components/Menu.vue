@@ -24,7 +24,7 @@ import { ElButton, ElInput, ElDialog } from "element-plus";
 import { computed, ref } from "vue";
 import useData from "../stores/data.ts"; //useData().state就是data.json的内容
 import useCommand from "../components/useCommand.ts";
-let { commands } = useCommand(useData().state);
+let { commands } = useCommand();
 // console.log(useCommand);
 //data导出的内容
 // let content = ref(null);
