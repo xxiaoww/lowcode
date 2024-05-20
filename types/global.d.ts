@@ -113,3 +113,29 @@ export interface RegisterConfig {
   componentMap: Record<string, componentConfig>;
   register: (component: componentConfig) => void;
 }
+
+//菜单操作command的配置
+export interface Command{
+  name:string,
+  keyboard?:string,
+  pushQueue?:boolean,
+  // init():{
+  //   before:string 
+  // },
+  before?:any,
+  init?():() => void,
+  execute(...args: any[]):{
+    redo:()=> void,
+    undo?:()=> void
+  }
+}
+
+//useCommand里面的state
+export interface State {
+  current:number,
+  queue:object[{undo:function,redo:function}],
+
+  commands:{[key:string]:() => void},
+  commandArray:command[],
+  destroyArray:function[],//这个不知道是不是
+}

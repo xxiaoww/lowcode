@@ -1,11 +1,13 @@
 <template>
   <div class="editor-block" :style="blockStyles" draggable="true">
     <!-- 组件渲染（使用组件的render函数来渲染） -->
-    <div class="editor-block-contain">
+    <div class="editor-block-contain" :keys="component.key">
       <component
+      v-if="component.body.length <= 0"
         :is="component.render"
+        :key="component.key"
         class="editor-in"
-        v-if="component.body.length <= 0"
+        
       >
       </component>
       <div style="display: flex" v-else>
@@ -34,7 +36,7 @@ import {
 } from "vue";
 import { Block, AppData } from "../../types/global";
 import "./editor.less";
-import { RegisterConfig } from "../../types/global";
+import { RegisterConfig,componentConfig } from "../../types/global";
 import { useFocus } from "./useFocus";
 import useData from "../stores/data"; //useData().state就是data.json的内容
 
@@ -49,7 +51,7 @@ export default defineComponent({
     //   type: Object as () => AppData
     // }
   },
-  setup(props) {
+  setup(props, context) {
     // let datas = props.datas
     // console.log(props.datas);
     console.log(useData().state);
@@ -58,25 +60,29 @@ export default defineComponent({
     // console.log(config);
     // const component:Block = config?.componentMap[props.block?.key]
     // const component:Block = (config?.componentMap as Record<string, any>)[props.block!.key] || null;
-    let component: any = null;
-    let block = props.block;
-    console.log(block!.body);
-    let blockBody: Block[];
-    blockBody = block!.body || [];
+     
+    const block = computed(() => {
+      console.log(props.block?.key);
+      return props.block;
+    });
+    console.log(block.value!.body);
+    let blockBody = computed(() => {
+      return block.value!.body
+    })
+    // let blockBody: Block[];
+    // blockBody = block.value!.body || [];
     console.log(blockBody);
-    if (config && props.block) {
-      const componentKeys = Object.keys(config.componentMap);
+    let component= computed(()=>{
+      const componentKeys = Object.keys(config!.componentMap);
       // console.log(componentKeys)
       for (const key of componentKeys) {
         // console.log(key)
-        if (key === props.block.key) {
-          component = config.componentMap[key];
-          // console.log(component.body.length)
-          // console.log(component.render())
-          break;
+        if (key === block.value!.key) {
+          return config!.componentMap[key];
         }
+     
       }
-    }
+    });
     console.log(component);
     console.log(props.block);
     const data: string = props.block!.key ?? " ";
@@ -96,7 +102,7 @@ export default defineComponent({
 
     let { onmousedown, focusData } = useFocus((e: any) => {
       console.log(focusData);
-      console.log(useData().state)
+      console.log(useData().state);
     });
 
     return {
