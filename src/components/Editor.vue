@@ -413,9 +413,35 @@ export default defineComponent({
         })
       }
       else if(block.id === focus[0].id){
+        let blockBody: Block[] = [];
+              console.log(component.body)
+      if (component.body!.length >= 1) {
+        for (let i = 0; i <component.body!.length; i++) {
+          let r: string = uuid();
+          // console.log(currentComponent.value!.body![i].key)
+          // console.log(r)
+          blockBody = [
+            ...blockBody,
+            {
+              zIndex: 1,
+              id: r,
+              key: component.body![i].key,
+              alignCenter: true,
+              focus: false,
+              body: [],
+              props: {},
+            },
+          ];
+        }
+        console.log(blockBody)
+      }
               block.key = component.key
+        
+      block.body = [...blockBody];
+      // 使用 Vue.set
                // 更新 state.blocks
               state.value = { ...state.value };
+              console.log(useData().state)
               console.log(state.value)
               console.log(block.body) 
       }else if(block.body && block.body.length > 0){
@@ -453,7 +479,7 @@ export default defineComponent({
     const addbox = function(block:any,component:any){
       let blockBody: Block[] = [];
       if (component.body!.length >= 1) {
-        for (let i = 0; i < currentComponent.value!.body!.length; i++) {
+        for (let i = 0; i <component.body!.length; i++) {
           let r: string = uuid();
           // console.log(currentComponent.value!.body![i].key)
           // console.log(r)
@@ -462,7 +488,7 @@ export default defineComponent({
             {
               zIndex: 1,
               id: r,
-              key: currentComponent.value!.body![i].key,
+              key: component.body![i].key,
               alignCenter: true,
               focus: false,
               body: [],
