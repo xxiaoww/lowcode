@@ -39,9 +39,9 @@
               :block="block"
               draggable="true"
               :data-id="block.id"
-              @mousedown="onmousedown($event, block,block.id ?? '')"
-              :class="block.focus ? 'editor-block-focus' : ''"></EditorBlock>
-          
+              @mousedown="onmousedown($event, block, block.id ?? '')"
+              :class="block.focus ? 'editor-block-focus' : ''"
+            ></EditorBlock>
           </div>
         </div>
       </div>
@@ -127,7 +127,6 @@ export default defineComponent({
     console.log(useData().state.blocks);
     console.log(useData().state);
 
-
     // state替换useData().state，防止报错
     let state = computed<AppData>({
       get() {
@@ -158,7 +157,7 @@ export default defineComponent({
 
     // 松手的时候
 
-    let data = useData().state
+    let data = useData().state;
     const drop = (e: DragEvent) => {
       // 阻止默认事件
       e.preventDefault();
@@ -182,7 +181,7 @@ export default defineComponent({
             },
           ];
         }
-        console.log(blockBody)
+        console.log(blockBody);
       }
 
       //随机生成id
@@ -211,7 +210,7 @@ export default defineComponent({
       };
       currentComponent.value = null;
       console.log(useData().state);
-      data = useData().state
+      data = useData().state;
       // console.log(useData().state);
     };
     // 拖拽开始事件
@@ -241,19 +240,17 @@ export default defineComponent({
     // 2.实现获取焦点，选中功能
     // console.log(data);
     let { onmousedown, focusData, clearBlockFocus } = useFocus(
+      useData().state,
       (e: any) => {
         console.log(e);
         let fid = e.target.parentNode.getAttribute("data-id");
         console.log(fid);
-        console.log(useData().state)
-        console.log(state)
-        useData().state.blocks.forEach(element => {
-          if(element.id === fid){
-            element.focus = true
-            // let children = element.body!
-            // children.forEach(e=>e.focus=true)
-          }
-        });
+        // data.exData.blocks.forEach(element => {
+        //   if(element.id === fid && element.body!.length>0){
+        //     let children = element.body!
+        //     children.forEach(e=>e.focus=true)
+        //   }
+        // });
         console.log(focusData);
         // console.log(e);
         // console.log(e.target)
@@ -385,7 +382,7 @@ export default defineComponent({
 
     return {
       state,
-      useData,//把useData放到return里，才可以在template的dom元素中使用
+      useData, //把useData放到return里，才可以在template的dom元素中使用
       data,
       containerStyle,
       config,
