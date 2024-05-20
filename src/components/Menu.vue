@@ -23,7 +23,9 @@
 import { ElButton, ElInput, ElDialog } from "element-plus";
 import { computed, ref } from "vue";
 import useData from "../stores/data.ts"; //useData().state就是data.json的内容
-
+import useCommand from "../components/useCommand.ts";
+let { commands } = useCommand(useData().state);
+// console.log(useCommand);
 //data导出的内容
 // let content = ref(null);
 // content.value = JSON.stringify(useData().state);
@@ -112,8 +114,8 @@ let onConfirm = () => {
 
 //按钮
 let button = [
-  //   { label: "Pre", icon: "icon-back", handle: () => commands.undo() },
-  //   { label: "Next", icon: "icon-Next", handle: () => commands.redo() },
+  { label: "Pre", icon: "icon-back", handle: () => commands.undo() },
+  { label: "Next", icon: "icon-Next", handle: () => commands.redo() },
   //   {
   //     label: "Refresh Page",
   //     icon: "icon-Refresh",

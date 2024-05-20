@@ -10,7 +10,7 @@
             draggable="true"
             class="editor-left-item"
             v-for="(item, index) in config?.componentList"
-            @click="editorClick(item,focusData)"
+            @click="editorClick(item, focusData)"
             :key="index"
             @dragstart="dragStart($event, item)"
             @dragend="dragEnd($event, item)"
@@ -41,9 +41,9 @@
               :keys="block.key"
               draggable="true"
               :data-id="block.id"
-              @mousedown="onmousedown($event, block,block.id ?? '')"
-              :class="block.focus ? 'editor-block-focus' : ''"></EditorBlock>
-          
+              @mousedown="onmousedown($event, block, block.id ?? '')"
+              :class="block.focus ? 'editor-block-focus' : ''"
+            ></EditorBlock>
           </div>
         </div>
       </div>
@@ -74,6 +74,8 @@ import Menu from "./Menu.vue";
 
 //引入data
 import useData from "../stores/data"; //useData().state就是data.json的内容
+
+import { events } from "./event";
 
 export default defineComponent({
   name: "Editor",
@@ -129,7 +131,6 @@ export default defineComponent({
     console.log(useData().state.blocks);
     console.log(useData().state);
 
-
     // state替换useData().state，防止报错
     let state = computed<AppData>({
       get() {
@@ -183,7 +184,7 @@ export default defineComponent({
             },
           ];
         }
-        console.log(blockBody)
+        console.log(blockBody);
       }
 
       //随机生成id
@@ -225,6 +226,9 @@ export default defineComponent({
       currentComponent.value = component;
       // console.log(currentComponent.value);
       // 还要再松手的时候，根据所拖拽的组件，添加一个组件
+
+      // 拖拽前发布start
+      events.emit("start");
     };
 
     // 拖拽结束事件
@@ -236,221 +240,225 @@ export default defineComponent({
       containerRef.value?.removeEventListener("dragleave", dragleave);
       containerRef.value?.removeEventListener("drop", drop);
       // console.log(data);
+
+      // 拖拽后发布start
+      events.emit("end");
     };
 
     // 2.实现获取焦点，选中功能
     // console.log(data);
-    let { onmousedown, focusData, clearBlockFocus } = useFocus(
-      (e: any) => {
-        console.log(e);
-        let fid = e.target.parentNode.getAttribute("data-id");
-        console.log(fid);
-        console.log(useData().state)
-        console.log(state)
-        useData().state.blocks.forEach(element => {
-          if(element.id === fid){
-            element.focus = true
-            // let children = element.body!
-            // children.forEach(e=>e.focus=true)
-          }
-        });
-        console.log(focusData);
-        // console.log(e);
-        // console.log(e.target)
-        //   let event:HTMLElement = e.target as HTMLElement;
-        //   //获取鼠标位置
-        // let pageX = e.pageX;
-        // let pageY = e.pageY;
-        // //获取鼠标按下时鼠标在盒子中的位置
-        // let boxX = pageX - event!.offsetLeft;
-        // let boxY = pageY - event!.offsetTop;
-        // document.onmousemove = function (e) {
-        //   //获取鼠标拖拽式在页面上的位置
-        //   let pageXs = e.pageX;
-        //   let pageYs = e.pageY;
-        //   event.style.left = pageXs - boxX + "px";
-        //   event.style.top = pageYs - boxY + "px";
-        // };
+    let { onmousedown, focusData, clearBlockFocus } = useFocus((e: any) => {
+      console.log(e);
+      let fid = e.target.parentNode.getAttribute("data-id");
+      console.log(fid);
+      console.log(useData().state);
+      console.log(state);
+      useData().state.blocks.forEach((element) => {
+        if (element.id === fid) {
+          element.focus = true;
+          // let children = element.body!
+          // children.forEach(e=>e.focus=true)
+        }
+      });
+      console.log(focusData);
+      // console.log(e);
+      // console.log(e.target)
+      //   let event:HTMLElement = e.target as HTMLElement;
+      //   //获取鼠标位置
+      // let pageX = e.pageX;
+      // let pageY = e.pageY;
+      // //获取鼠标按下时鼠标在盒子中的位置
+      // let boxX = pageX - event!.offsetLeft;
+      // let boxY = pageY - event!.offsetTop;
+      // document.onmousemove = function (e) {
+      //   //获取鼠标拖拽式在页面上的位置
+      //   let pageXs = e.pageX;
+      //   let pageYs = e.pageY;
+      //   event.style.left = pageXs - boxX + "px";
+      //   event.style.top = pageYs - boxY + "px";
+      // };
 
-        // document.onmouseup = function () {
-        //   document.onmousemove = null;  //删除拖拽事件
-        // };
+      // document.onmouseup = function () {
+      //   document.onmousemove = null;  //删除拖拽事件
+      // };
 
-        // mousedown(e);
-        // console.log(focusData.value.focus);
-        // let focus: Block[] = focusData.value.focus;
-        // let focusid = focus[0].id;
-        // console.log(focus);
-        // const elements = document.querySelectorAll(".editor-block");
-        // elements.forEach((block) => {
-        // 获取自定义属性的值
-        // console.log(block);
-        // block.removeEventListener("dragstart");
-        // let dataid: string = block.getAttribute("data-id")!;
-        // block.setAttribute("draggable", "true"); // 启用元素拖动
-        // console.log(dataid);
-        // console.log(typeof block);
-        // if (focusid === dataid) {
-        // console.log(block)
-        // console.log(dataid);
-        //   //           block.addEventListener("dragstart", function($Event) {
-        //   // // // 处理拖动开始时的逻辑
-        //   // //           // e.dataTransfer.setData("text/plain", dataid);
-        //   // $Event.dataTransfer.dropEffect = 'move'
-        //   //           },true);
-        //   //
-        //   // block.addEventListener("dragstart", (event: any) => {
-        //   //   // 设置拖动数据
-        //   console.log(event);
-        //   console.log(block);
-        //   //   debugger;
-        //   console.log(111);
-        //   //   event.dataTransfer.setData("text/plain", "Hello, World!");
+      // mousedown(e);
+      // console.log(focusData.value.focus);
+      // let focus: Block[] = focusData.value.focus;
+      // let focusid = focus[0].id;
+      // console.log(focus);
+      // const elements = document.querySelectorAll(".editor-block");
+      // elements.forEach((block) => {
+      // 获取自定义属性的值
+      // console.log(block);
+      // block.removeEventListener("dragstart");
+      // let dataid: string = block.getAttribute("data-id")!;
+      // block.setAttribute("draggable", "true"); // 启用元素拖动
+      // console.log(dataid);
+      // console.log(typeof block);
+      // if (focusid === dataid) {
+      // console.log(block)
+      // console.log(dataid);
+      //   //           block.addEventListener("dragstart", function($Event) {
+      //   // // // 处理拖动开始时的逻辑
+      //   // //           // e.dataTransfer.setData("text/plain", dataid);
+      //   // $Event.dataTransfer.dropEffect = 'move'
+      //   //           },true);
+      //   //
+      //   // block.addEventListener("dragstart", (event: any) => {
+      //   //   // 设置拖动数据
+      //   console.log(event);
+      //   console.log(block);
+      //   //   debugger;
+      //   console.log(111);
+      //   //   event.dataTransfer.setData("text/plain", "Hello, World!");
 
-        //   //   // 设置拖动效果为移动
-        //   //   event.dataTransfer.effectAllowed = "move";
-        //   // });
+      //   //   // 设置拖动效果为移动
+      //   //   event.dataTransfer.effectAllowed = "move";
+      //   // });
 
-        //   // block.addEventListener("drag", (event) => {
-        //   //   // 拖拽过程中的逻辑
-        //   // });
+      //   // block.addEventListener("drag", (event) => {
+      //   //   // 拖拽过程中的逻辑
+      //   // });
 
-        //   // block.addEventListener("dragend", (event) => {
-        //   //   // 拖拽结束时的逻辑
-        //   // });
-        // }
-        // });
-      }
-    );
-    
-    
+      //   // block.addEventListener("dragend", (event) => {
+      //   //   // 拖拽结束时的逻辑
+      //   // });
+      // }
+      // });
+    });
+
     // 给左侧组件添加点击事件，
     // 具体表现为 如果有选中的盒子，则在点击左侧组件后添加在选中盒子添加一个EditorBlock
     // 如果没有选中的盒子，则在最大的盒子里默认添加组件
-    const editorClick = (component:componentConfig,focusData:any)=>{
-      const focus:Block[] = focusData.focus
-      console.log(focus)
-      if(focus.length!== 0){
+    const editorClick = (component: componentConfig, focusData: any) => {
+      const focus: Block[] = focusData.focus;
+      console.log(focus);
+      if (focus.length !== 0) {
         // 要分为内容盒子，flex盒子，和普通已知具体标签的盒子
 
-
         // 1.如果选中的为内容组件
-        if(focus[0].key === "container"){
-          console.log(focus[0].id)
+        if (focus[0].key === "container") {
+          console.log(focus[0].id);
 
-          useData().state.blocks.forEach(block=>{
-            console.log(block.id)
-            lookforContainer(state,block,focus,component)
-          })
-          console.log(useData().state)
+          useData().state.blocks.forEach((block) => {
+            console.log(block.id);
+            lookforContainer(state, block, focus, component);
+          });
+          console.log(useData().state);
         }
         // 2.如果选中的为flex组件，自动在flex盒子添加
-        else if(focus[0].key === "flex"){
-          useData().state.blocks.forEach(block=>{
-            lookforFlex(state,block,focus,component)
-          })
-          
+        else if (focus[0].key === "flex") {
+          useData().state.blocks.forEach((block) => {
+            lookforFlex(state, block, focus, component);
+          });
         }
-      }else{
+      } else {
         let blockBody: Block[] = [];
-      if (component.body!.length >= 1) {
-        for (let i = 0; i < component!.body!.length; i++) {
-          let r: string = uuid();
-          // console.log(currentComponent.value!.body![i].key)
-          // console.log(r)
-          blockBody = [
-            ...blockBody,
-            {
-              zIndex: 1,
-              id: r,
-              key: component!.body![i].key,
-              alignCenter: true,
-              focus: false,
-              body: [],
-              props: {},
-            },
-          ];
+        if (component.body!.length >= 1) {
+          for (let i = 0; i < component!.body!.length; i++) {
+            let r: string = uuid();
+            // console.log(currentComponent.value!.body![i].key)
+            // console.log(r)
+            blockBody = [
+              ...blockBody,
+              {
+                zIndex: 1,
+                id: r,
+                key: component!.body![i].key,
+                alignCenter: true,
+                focus: false,
+                body: [],
+                props: {},
+              },
+            ];
+          }
         }
-      }
 
         //随机生成id
-      const random: string = uuid();
-      console.log(random);
-      // 置空
-      let blocks = useData().state.blocks as Block[];
+        const random: string = uuid();
+        console.log(random);
+        // 置空
+        let blocks = useData().state.blocks as Block[];
         useData().state = {
-        ...useData().state,
-        blocks: [
-          ...blocks,
-          {
-            zIndex: 1,
-            id: random,
-            key: component!.key,
-            alignCenter: true,
-            focus: false,
-            body: blockBody,
-            props: {},
-          },
-        ],
-      };
-      console.log(useData().state); 
+          ...useData().state,
+          blocks: [
+            ...blocks,
+            {
+              zIndex: 1,
+              id: random,
+              key: component!.key,
+              alignCenter: true,
+              focus: false,
+              body: blockBody,
+              props: {},
+            },
+          ],
+        };
+        console.log(useData().state);
       }
-
-    }
+    };
     // 寻找内容盒子
-    const lookforContainer = function(state:any,block:any,focus:any,component:any){
-      if(Array.isArray(block)){
-        block.forEach(b=>{
-          if(b.id === focus[0].id){
-            b.key = component.key
-              // 更新 state.blocks
-              state.value = { ...state.value };
-              console.log(state.value)
-             
-          }else if(b.body && b.body.length > 0){
-        lookforContainer(state,b.body!,focus,component)
+    const lookforContainer = function (
+      state: any,
+      block: any,
+      focus: any,
+      component: any
+    ) {
+      if (Array.isArray(block)) {
+        block.forEach((b) => {
+          if (b.id === focus[0].id) {
+            b.key = component.key;
+            // 更新 state.blocks
+            state.value = { ...state.value };
+            console.log(state.value);
+          } else if (b.body && b.body.length > 0) {
+            lookforContainer(state, b.body!, focus, component);
+          }
+        });
+      } else if (block.id === focus[0].id) {
+        block.key = component.key;
+        // 更新 state.blocks
+        state.value = { ...state.value };
+        console.log(state.value);
+        console.log(block.body);
+      } else if (block.body && block.body.length > 0) {
+        lookforContainer(state, block.body!, focus, component);
       }
-        })
-      }
-      else if(block.id === focus[0].id){
-              block.key = component.key
-               // 更新 state.blocks
-              state.value = { ...state.value };
-              console.log(state.value)
-              console.log(block.body) 
-      }else if(block.body && block.body.length > 0){
-        lookforContainer(state,block.body!,focus,component)
-      }
-    }
+    };
     //寻找flex盒子
-    const lookforFlex = function(state:any,block:any,focus:any,component:any){
-      if(Array.isArray(block)){
-        block.forEach(b=>{
-          if(b.id === focus[0].id){
+    const lookforFlex = function (
+      state: any,
+      block: any,
+      focus: any,
+      component: any
+    ) {
+      if (Array.isArray(block)) {
+        block.forEach((b) => {
+          if (b.id === focus[0].id) {
             // b.key = component.key
-            addbox(b,component)
-              // 更新 state.blocks
-              state.value = { ...state.value };
-              console.log(state.value)
-          }else if(b.body && b.body.length > 0){
-        lookforContainer(state,b.body!,focus,component)
-      }
-        })
-      }
-      else if(block.id === focus[0].id){
-              addbox(block,component)
+            addbox(b, component);
+            // 更新 state.blocks
+            state.value = { ...state.value };
+            console.log(state.value);
+          } else if (b.body && b.body.length > 0) {
+            lookforContainer(state, b.body!, focus, component);
+          }
+        });
+      } else if (block.id === focus[0].id) {
+        addbox(block, component);
 
-              // block.key = component.key
-               // 更新 state.blocks
-              state.value = { ...state.value };
-              console.log(state.value)
-              console.log(block.body) 
-      }else if(block.body && block.body.length > 0){
-        lookforFlex(state,block.body!,focus,component)
+        // block.key = component.key
+        // 更新 state.blocks
+        state.value = { ...state.value };
+        console.log(state.value);
+        console.log(block.body);
+      } else if (block.body && block.body.length > 0) {
+        lookforFlex(state, block.body!, focus, component);
       }
-    }
+    };
     // 添加盒子的函数
-    const addbox = function(block:any,component:any){
+    const addbox = function (block: any, component: any) {
       let blockBody: Block[] = [];
       if (component.body!.length >= 1) {
         for (let i = 0; i < currentComponent.value!.body!.length; i++) {
@@ -470,20 +478,19 @@ export default defineComponent({
             },
           ];
         }
-        console.log(blockBody)
+        console.log(blockBody);
       }
-      let random = uuid()
+      let random = uuid();
       block.body.push({
         zIndex: 1,
-              id: random,
-              key: component.key,
-              alignCenter: true,
-              focus: false,
-              body: blockBody,
-              props: {},
-      })
-    }
-
+        id: random,
+        key: component.key,
+        alignCenter: true,
+        focus: false,
+        body: blockBody,
+        props: {},
+      });
+    };
 
     // 移动信息
     type dragState = {
@@ -548,7 +555,7 @@ export default defineComponent({
 
     return {
       state,
-      useData,//把useData放到return里，才可以在template的dom元素中使用
+      useData, //把useData放到return里，才可以在template的dom元素中使用
       containerStyle,
       config,
       containerRef,
@@ -557,7 +564,7 @@ export default defineComponent({
       onmousedown,
       clearBlockFocus,
       editorClick,
-      focusData
+      focusData,
     };
   },
 });
