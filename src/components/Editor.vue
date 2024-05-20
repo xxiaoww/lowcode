@@ -340,9 +340,16 @@ export default defineComponent({
 
           useData().state.blocks.forEach(block=>{
             console.log(block.id)
-            lookforId(state,block,focus,component)
+            lookforContainer(state,block,focus,component)
           })
           console.log(useData().state)
+        }
+        // 2.如果选中的为flex组件，自动在flex盒子添加
+        else if(focus[0].key === "flex"){
+          useData().state.blocks.forEach(block=>{
+            lookforFlex(state,block,focus,component)
+          })
+          
         }
       }else{
         let blockBody: Block[] = [];
@@ -390,7 +397,8 @@ export default defineComponent({
       }
 
     }
-    const lookforId = function(state:any,block:any,focus:any,component:any){
+    // 寻找内容盒子
+    const lookforContainer = function(state:any,block:any,focus:any,component:any){
       if(Array.isArray(block)){
         block.forEach(b=>{
           if(b.id === focus[0].id){
@@ -399,7 +407,9 @@ export default defineComponent({
               state.value = { ...state.value };
               console.log(state.value)
              
-          }
+          }else if(b.body && b.body.length > 0){
+        lookforContainer(state,b.body!,focus,component)
+      }
         })
       }
       else if(block.id === focus[0].id){
@@ -409,11 +419,72 @@ export default defineComponent({
               console.log(state.value)
               console.log(block.body) 
       }else if(block.body && block.body.length > 0){
-        lookforId(state,block.body!,focus,component)
+        lookforContainer(state,block.body!,focus,component)
       }
     }
-    
-    
+    //寻找flex盒子
+    const lookforFlex = function(state:any,block:any,focus:any,component:any){
+      if(Array.isArray(block)){
+        block.forEach(b=>{
+          if(b.id === focus[0].id){
+            // b.key = component.key
+            addbox(b,component)
+              // 更新 state.blocks
+              state.value = { ...state.value };
+              console.log(state.value)
+          }else if(b.body && b.body.length > 0){
+        lookforContainer(state,b.body!,focus,component)
+      }
+        })
+      }
+      else if(block.id === focus[0].id){
+              addbox(block,component)
+
+              // block.key = component.key
+               // 更新 state.blocks
+              state.value = { ...state.value };
+              console.log(state.value)
+              console.log(block.body) 
+      }else if(block.body && block.body.length > 0){
+        lookforFlex(state,block.body!,focus,component)
+      }
+    }
+    // 添加盒子的函数
+    const addbox = function(block:any,component:any){
+      let blockBody: Block[] = [];
+      if (component.body!.length >= 1) {
+        for (let i = 0; i < currentComponent.value!.body!.length; i++) {
+          let r: string = uuid();
+          // console.log(currentComponent.value!.body![i].key)
+          // console.log(r)
+          blockBody = [
+            ...blockBody,
+            {
+              zIndex: 1,
+              id: r,
+              key: currentComponent.value!.body![i].key,
+              alignCenter: true,
+              focus: false,
+              body: [],
+              props: {},
+            },
+          ];
+        }
+        console.log(blockBody)
+      }
+      let random = uuid()
+      block.body.push({
+        zIndex: 1,
+              id: random,
+              key: component.key,
+              alignCenter: true,
+              focus: false,
+              body: blockBody,
+              props: {},
+      })
+    }
+
+
     // 移动信息
     type dragState = {
       startX: number;
