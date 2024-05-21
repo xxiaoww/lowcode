@@ -6,6 +6,7 @@ import {
     RegisterConfig,
   } from "../../types/global";
 import useData from "../stores/data"; //useData().state就是data.json的内容
+
  
  
  // 给左侧组件添加点击事件，

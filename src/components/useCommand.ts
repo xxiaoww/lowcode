@@ -117,8 +117,41 @@ export default function useCommand(){
 
     })
 
+    //键盘事件
+    const keyboardEvent = (()=>{
+        const keyCodes:{[key:string]:string} = {
+            "90":'z',
+            "89":'y'
+        }
+        const onKeydown = (e:KeyboardEvent) => {
+            const {ctrlKey,keyCode} = e;
+            let keyString:string[] = [];
+            if(ctrlKey) keyString.push('ctrl');
+            keyString.push(keyCodes[keyCode]);
+            const keyStr:string = keyString.join('+');
+
+            state.commandArray.forEach(({keyboard,name})=>{
+                if(!keyboard) return //没有键盘事件
+                if(keyboard === keyStr){
+                    state.commands[name]();
+                    e.preventDefault();
+                }
+            })
+        }
+        const init = () => {//初始化事件
+            window.addEventListener('keydown',onKeydown)
+            return () => {//销毁事件
+                window.removeEventListener('keydown',onKeydown)
+
+            }
+        }
+        return init
+    })()
     
     ;(() => {
+        //监听键盘事件
+        state.destroyArray.push(keyboardEvent())
+
         // commandArray里面所有方法 遍历，看有没有init方法的，有的话就执行，init执行后会返回一个销毁的 放在销毁数组
         state.commandArray.forEach(
           (command) => command.init && state.destroyArray.push(command.init())
