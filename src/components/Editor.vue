@@ -77,6 +77,7 @@ import useData from "../stores/data"; //useData().state就是data.json的内容
 
 import { events } from "./event";
 import { editorClick } from "./editorClick";
+
 export default defineComponent({
   name: "Editor",
   components: {

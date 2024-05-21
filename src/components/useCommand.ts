@@ -25,9 +25,9 @@ export default function useCommand(){
     const registry = (command:Command) =>{
         state.commandArray.push(command);
         // 往那个映射表（commandArray）添加
-        state.commands[command.name] = () =>{
+        state.commands[command.name] = (...args) =>{
             //拿到对应返回 的函数
-            const {redo,undo} = command.execute();
+            const {redo,undo} = command.execute(...args);
             redo();//调用对应返回的函数  （所以也就是外面直接调用commands的对应操作命令名字就好了）
 
             if (!command.pushQueue) {
@@ -117,20 +117,47 @@ export default function useCommand(){
 
     })
 
+
+    
+  //带有历史记录常用模式
+  registry({
+    name: "updateContainer", //更新整个容器
+    pushQueue: true, //表示要放到队列里
+    execute(newValue) {
+      let state = {
+        before: useData().state, //当前值
+        after: newValue, //新值
+      };
+      return {
+        redo: () => {
+          //前进
+          useData().state = state.after;
+        },
+        undo: () => {
+          //后退
+          useData().state = state.before;
+        },
+      };
+    },
+  });
+
+
     //键盘事件
     const keyboardEvent = (()=>{
+
+        //定义keyCode对应字符串
         const keyCodes:{[key:string]:string} = {
             "90":'z',
             "89":'y'
         }
-        const onKeydown = (e:KeyboardEvent) => {
-            const {ctrlKey,keyCode} = e;
+        const onKeydown = (e:KeyboardEvent) => {//键盘按键点击后
+            const {ctrlKey,keyCode} = e;//获取ctrl键（判断有没有点击ctrl)、keyCode(可以用来获取对象中键对应按键值)
             let keyString:string[] = [];
             if(ctrlKey) keyString.push('ctrl');
-            keyString.push(keyCodes[keyCode]);
-            const keyStr:string = keyString.join('+');
+            keyString.push(keyCodes[keyCode]);      //按键的字符串放进数组
+            const keyStr:string = keyString.join('+');  //转为ctrl+z ctrl+y 字符串
 
-            state.commandArray.forEach(({keyboard,name})=>{
+            state.commandArray.forEach(({keyboard,name})=>{ //指令数组遍历  判断有没有键盘事件，有的话（redo,undo就有）就调用对应函数，
                 if(!keyboard) return //没有键盘事件
                 if(keyboard === keyStr){
                     state.commands[name]();

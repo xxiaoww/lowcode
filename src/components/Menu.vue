@@ -24,6 +24,7 @@ import { ElButton, ElInput, ElDialog } from "element-plus";
 import { computed, ref } from "vue";
 import useData from "../stores/data.ts"; //useData().state就是data.json的内容
 import useCommand from "../components/useCommand.ts";
+import { events } from "./event";
 let { commands } = useCommand();
 // console.log(useCommand);
 //data导出的内容
@@ -48,7 +49,9 @@ let isShow = () => {
 let onShow2 = ref(false); //控制显示隐藏
 let isShow2 = () => {
   //   alert(2);
+
   onShow2.value = !onShow2.value;
+  // events.emit("end");
 };
 
 //点击取消
@@ -57,6 +60,8 @@ let onCancle = () => {
 };
 //点击确定
 let onConfirm = () => {
+  commands.updateContainer(JSON.parse(content2.value)); //更新的时候就调用，把新的传过去
+  // events.emit("start");
   onShow2.value = false;
   //将当前内容转化出来
   // useData().state = content2.value; //原来这样写是错的（不能直接将字符串赋值给 useData().state，因为 useData().state 期望的是一个对象，而 content2.value 是一个字符串。因此，你需要先将字符串解析为一个对象，然后再赋值给 useData().state。
