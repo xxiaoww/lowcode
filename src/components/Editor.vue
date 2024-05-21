@@ -10,7 +10,7 @@
             draggable="true"
             class="editor-left-item"
             v-for="(item, index) in config?.componentList"
-            @click="editorClick(item, focusData,state)"
+            @click="editorClick(item, focusData, state)"
             :key="index"
             @dragstart="dragStart($event, item)"
             @dragend="dragEnd($event, item)"
@@ -76,7 +76,7 @@ import Menu from "./Menu.vue";
 import useData from "../stores/data"; //useData().state就是data.json的内容
 
 import { events } from "./event";
-import {editorClick } from "./editorClick"
+import { editorClick } from "./editorClick";
 export default defineComponent({
   name: "Editor",
   components: {
@@ -329,9 +329,6 @@ export default defineComponent({
       // }
       // });
     });
-
-    
-    
 
     // 移动信息
     type dragState = {
