@@ -57,6 +57,15 @@ registerConfig.register({
     body:[],
     props: {}
 })
+// 另一个容器
+registerConfig.register({
+    label:'小容器',
+    render: () => h('div'),
+    key:'latercontainer',
+    icon:'icon-fangkuang',
+    body:[],
+    props:[]
+})
 // 文本
 registerConfig.register({
     label: "文本",
