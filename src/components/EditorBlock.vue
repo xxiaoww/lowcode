@@ -3,14 +3,13 @@
     <!-- 组件渲染（使用组件的render函数来渲染） -->
     <div class="editor-block-contain" :keys="component.key">
       <component
-      v-if="component.body.length <= 0"
+      v-if="component.body.length <= 0 && block.body <= 0"
         :is="component.render"
         :key="component.key"
         class="editor-in"
-        
       >
       </component>
-      <div style="display: flex" v-else>
+      <div v-else :style="{display: component.key==='flex' ? 'flex' : 'block'}">
         <!-- 这里的block是block.body -->
         <EditorBlock
           v-for="(block, index) in blockBody"
