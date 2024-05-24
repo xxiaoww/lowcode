@@ -3,11 +3,10 @@
     <!-- 组件渲染（使用组件的render函数来渲染） -->
     <div class="editor-block-contain" :keys="component.key">
       <component
-      v-if="component.body.length <= 0"
+        v-if="component.body.length <= 0"
         :is="component.render"
         :key="component.key"
         class="editor-in"
-        
       >
       </component>
       <div style="display: flex" v-else>
@@ -36,7 +35,7 @@ import {
 } from "vue";
 import { Block, AppData } from "../../types/global";
 import "./editor.less";
-import { RegisterConfig,componentConfig } from "../../types/global";
+import { RegisterConfig, componentConfig } from "../../types/global";
 import { useFocus } from "./useFocus";
 import useData from "../stores/data"; //useData().state就是data.json的内容
 
@@ -60,19 +59,19 @@ export default defineComponent({
     // console.log(config);
     // const component:Block = config?.componentMap[props.block?.key]
     // const component:Block = (config?.componentMap as Record<string, any>)[props.block!.key] || null;
-     
+
     const block = computed(() => {
       console.log(props.block?.key);
       return props.block;
     });
     console.log(block.value!.body);
     let blockBody = computed(() => {
-      return block.value!.body
-    })
+      return block.value!.body;
+    });
     // let blockBody: Block[];
     // blockBody = block.value!.body || [];
     console.log(blockBody);
-    let component= computed(()=>{
+    let component = computed(() => {
       const componentKeys = Object.keys(config!.componentMap);
       // console.log(componentKeys)
       for (const key of componentKeys) {
@@ -80,7 +79,6 @@ export default defineComponent({
         if (key === block.value!.key) {
           return config!.componentMap[key];
         }
-     
       }
     });
     console.log(component);
