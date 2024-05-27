@@ -22,7 +22,10 @@
       </div>
       <!-- <div class="editor-top">菜单栏</div> -->
       <Menu></Menu>
-      <div class="editor-right">属性控制栏</div>
+      <div class="editor-right">
+        属性控制栏
+        <EditorOperator></EditorOperator>
+      </div>
       <div class="editor-container">
         <!-- 负责产生滚动条 -->
         <div class="editor-container-block">
@@ -61,6 +64,7 @@ import {
 } from "../../types/global";
 import EditorBlock from "./EditorBlock.vue";
 import deepcopy from "deepcopy";
+import EditorOperator from "./EditorOperator.vue";
 
 // 引进样式
 import "./editor.less";
@@ -77,11 +81,13 @@ import useData from "../stores/data"; //useData().state就是data.json的内容
 
 import { events } from "./event";
 import { editorClick } from "./editorClick";
+// import EditorOperatorVue from "./EditorOperator.vue";
 
 export default defineComponent({
   name: "Editor",
   components: {
     EditorBlock,
+    EditorOperator,
     Menu,
   },
   props: {
