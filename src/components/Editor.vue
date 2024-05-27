@@ -41,8 +41,10 @@
               :keys="block.key"
               draggable="true"
               :data-id="block.id"
-              @mousedown="onmousedown($event, block, block.id ?? '')"
+              @mousedown="block.focus?'':onmousedown($event, block, block.id)"
               :class="block.focus ? 'editor-block-focus' : ''"
+              @dragstart="dragElement($event,focusData)"
+              :drag=false
             ></EditorBlock>
           </div>
         </div>
@@ -331,6 +333,20 @@ export default defineComponent({
       // });
     });
 
+
+    // 编辑器内的拖拽
+    // 开始拖拽的函数
+    const dragElement = function(e:DragEvent,focusData:any){
+      console.log(e.target)
+      const target = e.target as HTMLElement
+      e.dataTransfer!.setData('text/plain',focusData)
+      console.log(e.dataTransfer!.getData('text/plain'))
+      console.log(target!.getAttribute('data-id'))
+      e.dataTransfer!.effectAllowed='move'
+      containerRef.value?.addEventListener("dragenter", dragenter);
+      containerRef.value?.addEventListener("dragover", dragover);
+      containerRef.value?.addEventListener("dragleave", dragleave);
+    }
     // 移动信息
     type dragState = {
       startX: number;
@@ -404,6 +420,7 @@ export default defineComponent({
       onmousedown,
       clearBlockFocus,
       editorClick,
+      dragElement,
       focusData,
     };
   },
