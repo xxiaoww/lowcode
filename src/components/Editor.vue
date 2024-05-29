@@ -87,6 +87,8 @@ import { events } from "./event";
 import { editorClick } from "./editorClick";
 // import EditorOperatorVue from "./EditorOperator.vue";
 
+// 引入编辑器内的拖拽函数
+import { useEditorDrag } from "./useEditorDrag";
 export default defineComponent({
   name: "Editor",
   components: {
@@ -343,17 +345,18 @@ export default defineComponent({
 
     // 编辑器内的拖拽
     // 开始拖拽的函数
-    const dragElement = function (e: DragEvent, focusData: any) {
-      console.log(e.target);
-      const target = e.target as HTMLElement;
-      e.dataTransfer!.setData("text/plain", focusData);
-      console.log(e.dataTransfer!.getData("text/plain"));
-      console.log(target!.getAttribute("data-id"));
-      e.dataTransfer!.effectAllowed = "move";
-      containerRef.value?.addEventListener("dragenter", dragenter);
-      containerRef.value?.addEventListener("dragover", dragover);
-      containerRef.value?.addEventListener("dragleave", dragleave);
-    };
+    let {dragstart:dragElement} = useEditorDrag()
+    // const dragElement = function (e: DragEvent, focusData: any) {
+    //   console.log(e.target);
+    //   const target = e.target as HTMLElement;
+    //   e.dataTransfer!.setData("text/plain", focusData);
+    //   console.log(e.dataTransfer!.getData("text/plain"));
+    //   console.log(target!.getAttribute("data-id"));
+    //   e.dataTransfer!.effectAllowed = "move";
+    //   containerRef.value?.addEventListener("dragenter", dragenter);
+    //   containerRef.value?.addEventListener("dragover", dragover);
+    //   containerRef.value?.addEventListener("dragleave", dragleave);
+    // };
     // 移动信息
     type dragState = {
       startX: number;

@@ -1,10 +1,10 @@
 import { lookforId } from "./useLookforId";
-export function useEditorDrag(e: DragEvent, focusData: any) {
+export function useEditorDrag() {
   const dragenter = function (e: DragEvent) {};
   const dragover = function (e: DragEvent) {};
   const dragleave = function (e: DragEvent) {};
   const drop = function (e: DragEvent) {};
-  let dragstart = function (e: DragEvent) {
+  let dragstart = function (e: DragEvent,focusData:any) {
     console.log(e.target);
     const target = e.target as HTMLElement;
     e.dataTransfer!.setData("text/plain", focusData);
@@ -20,4 +20,7 @@ export function useEditorDrag(e: DragEvent, focusData: any) {
 
     // 给目标元素添加的是drop事件，dragover事件（这个事件为拖拽元素进入到目标元素的时候触发的函数，并且执行阻止默认行为
   };
+  return {
+    dragstart
+  }
 }
