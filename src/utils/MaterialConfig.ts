@@ -150,8 +150,14 @@ registerConfig.register({
   icon: "icon-m-xialakuang",
   body: [],
   props: {
-    text: createInputProp("输入框文本"),
+    // text: createInputProp("输入框文本"),
     color: createColorProp("颜色"),
+    model: {
+      label: "输入框内容",
+      model: {
+        default: "绑定字段",
+      },
+    },
   },
 });
 // 按钮组件
