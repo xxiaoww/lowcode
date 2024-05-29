@@ -39,7 +39,7 @@ const createInputProp = (label: string) => ({ type: "input", label });
 // 颜色选择属性
 const createColorProp = (label: string) => ({ type: "color", label });
 // 选择框属性
-const createSelectProp = (label: string, option: string) => ({
+const createSelectProp = (label: string, option: object) => ({
   type: "select",
   label,
   option,
@@ -70,9 +70,8 @@ registerConfig.register({
   icon: "icon-anniu",
   body: [{ key: "container" }, { key: "container" }, { key: "container" }],
   props: {
-    text: "文本内容",
-    type: "text",
-    options: [],
+    text: createInputProp("文本内容"),
+    color: createColorProp("颜色"),
   },
 });
 // 容器组件
@@ -84,9 +83,8 @@ registerConfig.register({
   icon: "icon-fangkuang",
   body: [],
   props: {
-    text: "文本内容",
-    type: "text",
-    options: [],
+    text: createInputProp("文本内容"),
+    color: createColorProp("颜色"),
   },
 });
 // 另一个容器
@@ -97,9 +95,8 @@ registerConfig.register({
   icon: "icon-fangkuang",
   body: [],
   props: {
-    text: "文本内容",
-    type: "text",
-    options: [],
+    text: createInputProp("文本内容"),
+    color: createColorProp("颜色"),
   },
 });
 // 文本
@@ -111,9 +108,13 @@ registerConfig.register({
   icon: "icon-wenben",
   body: [],
   props: {
-    text: createInputProp("文本内容"),
-    type: "text",
-    options: [],
+    text: createInputProp("输入文本内容"),
+    color: createColorProp("字体颜色"),
+    size: createSelectProp("字体大小", [
+      { label: "14px", value: "14px" },
+      { label: "20px", value: "20px" },
+      { label: "24px", value: "24px" },
+    ]),
   },
 });
 // 按钮
@@ -125,9 +126,19 @@ registerConfig.register({
   icon: "icon-anniu",
   body: [],
   props: {
-    text: "按钮",
-    type: "text",
-    options: [],
+    text: createInputProp("按钮内容"),
+    type: createSelectProp("按钮类型", [
+      { label: "基础", value: "primary" },
+      { label: "成功", value: "success" },
+      { label: "警告", value: "warning" },
+      { label: "危险", value: "danger" },
+      { label: "文本", value: "text" },
+    ]),
+    size: createSelectProp("按钮尺寸", [
+      { label: "默认", value: "" },
+      { label: "中等", value: "medium" },
+      { label: "小", value: "small" },
+    ]),
   },
 });
 // 输入框
@@ -139,9 +150,8 @@ registerConfig.register({
   icon: "icon-m-xialakuang",
   body: [],
   props: {
-    text: "输入框内容",
-    type: "text",
-    options: [],
+    text: createInputProp("输入框文本"),
+    color: createColorProp("颜色"),
   },
 });
 // 按钮组件
@@ -158,9 +168,19 @@ registerConfig.register({
   icon: "icon-button-group",
   body: [],
   props: {
-    text: "按钮组件",
-    type: "text",
-    options: [],
+    text: createInputProp("按钮内容"),
+    type: createSelectProp("按钮类型", [
+      { label: "基础", value: "primary" },
+      { label: "成功", value: "success" },
+      { label: "警告", value: "warning" },
+      { label: "危险", value: "danger" },
+      { label: "文本", value: "text" },
+    ]),
+    size: createSelectProp("按钮尺寸", [
+      { label: "默认", value: "" },
+      { label: "中等", value: "medium" },
+      { label: "小", value: "small" },
+    ]),
   },
 });
 // 单选框
@@ -183,8 +203,7 @@ registerConfig.register({
   icon: "icon-danxuankuang",
   body: [],
   props: {
-    text: "单选框内容",
-    type: "text",
-    options: [],
+    text: createInputProp("单选框文本"),
+    color: createColorProp("颜色"),
   },
 });
