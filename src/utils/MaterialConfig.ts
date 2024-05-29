@@ -51,7 +51,12 @@ registerConfig.register({
   key: "flex",
   icon: "icon-anniu",
   body: [{ key: "container" }, { key: "container" }, { key: "container" }],
-  props: {},
+
+  props: {
+    text: "文本内容",
+    type: "text",
+    options: [],
+  },
 });
 // 容器组件
 registerConfig.register({
@@ -61,7 +66,11 @@ registerConfig.register({
   key: "container",
   icon: "icon-fangkuang",
   body: [],
-  props: {},
+  props: {
+    text: "文本内容",
+    type: "text",
+    options: [],
+  },
 });
 // 另一个容器
 registerConfig.register({
@@ -70,7 +79,11 @@ registerConfig.register({
   key: "latercontainer",
   icon: "icon-fangkuang",
   body: [],
-  props: [],
+  props: {
+    text: "文本内容",
+    type: "text",
+    options: [],
+  },
 });
 // 文本
 registerConfig.register({
