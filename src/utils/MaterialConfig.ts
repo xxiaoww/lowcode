@@ -33,6 +33,24 @@ function createEditorConfig(): RegisterConfig {
     },
   };
 }
+
+// 内容属性
+const createInputProp = (label: string) => ({ type: "input", label });
+// 颜色选择属性
+const createColorProp = (label: string) => ({ type: "color", label });
+// 选择框属性
+const createSelectProp = (label: string, option: string) => ({
+  type: "select",
+  label,
+  option,
+});
+// 下拉框属性
+const createTableProp = (label: string, table: string) => ({
+  type: "table",
+  label,
+  table,
+});
+
 // 设置字体大小的配置
 // const createInputProp = (label:string):componentProps=>({
 //     type:'input',
@@ -51,7 +69,6 @@ registerConfig.register({
   key: "flex",
   icon: "icon-anniu",
   body: [{ key: "container" }, { key: "container" }, { key: "container" }],
-
   props: {
     text: "文本内容",
     type: "text",
@@ -94,7 +111,7 @@ registerConfig.register({
   icon: "icon-wenben",
   body: [],
   props: {
-    text: "文本内容",
+    text: createInputProp("文本内容"),
     type: "text",
     options: [],
   },

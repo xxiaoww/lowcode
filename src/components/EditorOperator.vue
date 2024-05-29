@@ -16,7 +16,7 @@
 
 <script>
 // 获取用户选中的组件，在右侧展示组件的配置信息
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, inject, ref, watch } from "vue";
 
 import useData from "../stores/data";
 //获取选中的组件
@@ -25,6 +25,9 @@ import { textProps } from "element-plus";
 export default defineComponent({
   name: "EditorOperator",
   setup() {
+    //引入config
+    const config = inject("config");
+
     //控制显示的是组件的还是最外面容器的
     let onClick = ref(false); //默认没有点击组件
 
@@ -47,7 +50,15 @@ export default defineComponent({
           //   return useFocus().focusData.value.focus[0].props.type;
           // });
           // return { text, type };
-          text.value = useFocus().focusData.value.focus[0];
+
+          // 获取该block的key
+          let comKey = useFocus().focusData.value.focus[0].key;
+          let comProps = config.componentList.filter((item) => {
+            if (item.key === comKey) {
+              return item;
+            }
+          });
+          text.value = comProps[0].props;
           // type.value = useFocus().focusData.value.focus[0].props.type;
           // text.value = "11";
         } else {
