@@ -1,9 +1,13 @@
 <template>
   <template v-if="!onClick">
     <div class="containerSetting">
-      容器宽度<input type="text" v-model="width" />px
-      <br />
-      容器高度<input type="text" v-model="height" />px
+      <ElFormItem label="容器宽度"
+        ><ElInput type="text" v-model="width"></ElInput
+      ></ElFormItem>
+
+      <ElFormItem label="容器高度"
+        ><ElInput type="text" v-model="height"></ElInput
+      ></ElFormItem>
     </div>
   </template>
   <template v-else>
@@ -14,7 +18,11 @@
       <!-- props的类型 -->
       <template v-for="(p, index) in propsContent" :key="index">
         <ElFormItem :label="p.label">
+          <!-- 输入框的 (model) -->
+          <ElInput v-if="p.model" v-model="p.model.default"></ElInput>
+          <!-- 只是输入内容 -->
           <ElInput v-if="p.type === 'input'"></ElInput>
+
           <ElColorPicker v-if="p.type === 'color'"></ElColorPicker>
           <ElSelect v-if="p.type === 'select'">
             <ElOption
@@ -27,9 +35,6 @@
           </ElSelect>
         </ElFormItem>
       </template>
-
-      <!-- model的类型 -->
-      <template>111</template>
     </div>
   </template>
 </template>
@@ -71,8 +76,6 @@ export default defineComponent({
     let type = ref("");
 
     let propsContent = ref([]);
-    // let text = null;
-    // let type = null;
     watch(
       () => {
         return useFocus().focusData.value.focus.length;
@@ -80,14 +83,6 @@ export default defineComponent({
       (newValue) => {
         if (newValue > 0) {
           onClick.value = true;
-          // text = computed(() => {
-          //   return useFocus().focusData.value.focus[0].props.text;
-          // });
-          // type = computed(() => {
-          //   return useFocus().focusData.value.focus[0].props.type;
-          // });
-          // return { text, type };
-
           // 获取该block的key
           let comKey = useFocus().focusData.value.focus[0].key;
           let comProps = config.componentList.filter((item) => {
@@ -96,10 +91,8 @@ export default defineComponent({
             }
           });
           //拿到对应props对象的所有key对应的值的数组，然后遍历渲染
-          text.value = Object.values(comProps[0].props);
+          // text.value = Object.values(comProps[0].props);
           propsContent.value = Object.values(comProps[0].props);
-          // type.value = useFocus().focusData.value.focus[0].props.type;
-          // text.value = "11";
         } else {
           onClick.value = false;
         }
@@ -123,82 +116,7 @@ export default defineComponent({
       },
     });
 
-    // watch(
-    //   () => {
-    //     return { width, height };
-    //   },
-    //   (newFocus) => {
-    //     useData().state.container.width = newFocus.width.value;
-    //     useData().state.container.height = newFocus.height.value;
-    //   },
-    //   { immediate: true } // 如果需要初始设置 content
-    // );
-    // const dynamicComponent = ref(null);
-    // const dynamicProps = ref({});
-    // // 创建一个容器设置的组件
-    // const ContainerSettings = defineComponent({
-    //   template: `
-    //     <div>
-    //       容器宽度<input type="text" v-model="${width}" />
-    //       <br />
-    //       容器高度<input type="text" v-model="${height}" />
-    //     </div>
-    //   `,
-    //   props: {
-    //     width: Number,
-    //     height: Number,
-    //   },
-    //   setup(props) {
-    //     const width = ref(props.width);
-    //     const height = ref(props.height);
-    //     // // 确保v-model是响应式的
-    //     // watch(
-    //     //   () => props.width,
-    //     //   (newVal) => {
-    //     //     width.value = newVal;
-    //     //   }
-    //     // );
-    //     // watch(
-    //     //   () => props.height,
-    //     //   (newVal) => {
-    //     //     height.value = newVal;
-    //     //   }
-    //     // );
-    //     return { width, height };
-    //   },
-    // });
-    // let content = ref(null);
-    // watch(
-    //   () => {
-    //     //focus为0时，focus[0]是undefined，直接focus[0].props会报错
-    //     if (useFocus().focusData.value.focus.length > 0) {
-    //       return useFocus().focusData.value.focus[0].props;
-    //     } else {
-    //       return `容器宽度<input type="text" v-model="${
-    //         useData().state.container.width
-    //       }px">
-    //     <br/>
-    //     容器高度<input type="text" v-model="${
-    //       useData().state.container.height
-    //     }px">`;
-    //     }
-    //   },
-    //   (newFocus) => {
-    //     // if (newFocus.length > 0) {
-    //     //   dynamicComponent.value = "div"; // 或其他默认组件
-    //     //   dynamicProps.value = newFocus[0].props;
-    //     // } else {
-    //     //   dynamicComponent.value = ContainerSettings;
-    //     //   dynamicComponent.value.width = useData().state.container.width;
-    //     //   dynamicComponent.value.height = useData().state.container.height;
-    //     // }
-    //     content.value = newFocus;
-    //   },
-    //   { immediate: true } // 如果需要初始设置 content
-    // );
-    // // }
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
-    // // content.value = foucsCom ? foucsCom.label : "";
     return {
       width,
       height,

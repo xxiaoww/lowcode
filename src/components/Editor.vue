@@ -23,7 +23,8 @@
       <!-- <div class="editor-top">菜单栏</div> -->
       <Menu></Menu>
       <div class="editor-right">
-        属性控制栏
+        <div class="tit">属性控制栏</div>
+
         <EditorOperator></EditorOperator>
       </div>
       <div class="editor-container">
@@ -345,7 +346,7 @@ export default defineComponent({
 
     // 编辑器内的拖拽
     // 开始拖拽的函数
-    let {dragstart:dragElement} = useEditorDrag()
+    let { dragstart: dragElement } = useEditorDrag();
     // const dragElement = function (e: DragEvent, focusData: any) {
     //   console.log(e.target);
     //   const target = e.target as HTMLElement;
@@ -437,4 +438,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="less"></style>
+<style lang="less" scoped>
+.editor-right {
+  padding: 20px;
+  box-sizing: border-box;
+  .tit {
+    font-size: 18px;
+    margin-bottom: 32px;
+  }
+}
+</style>
