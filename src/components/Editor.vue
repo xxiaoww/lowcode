@@ -44,10 +44,12 @@
               :keys="block.key"
               draggable="true"
               :data-id="block.id"
-              @mousedown="block.focus?'':onmousedown($event, block, block.id)"
+              @mousedown="
+                block.focus ? '' : onmousedown($event, block, block.id)
+              "
               :class="block.focus ? 'editor-block-focus' : ''"
-              @dragstart="dragElement($event,focusData)"
-              :drag=false
+              @dragstart="dragElement($event, focusData)"
+              :drag="false"
             ></EditorBlock>
           </div>
         </div>
@@ -129,11 +131,11 @@ export default defineComponent({
 
     // 内容的样式
     const containerStyle: ComputedRef<CSSProperties> = computed(() => {
-      const { container } = useData().state;
-      console.log(container);
+      // const { container } = useData().state;
+      // console.log(container);
       return {
-        width: `${container.width}px`,
-        height: `${container.height}px`,
+        width: `${useData().state.container.width}px`,
+        height: `${useData().state.container.height}px`,
       };
     });
     console.log(containerStyle.value);
@@ -339,20 +341,19 @@ export default defineComponent({
       // });
     });
 
-
     // 编辑器内的拖拽
     // 开始拖拽的函数
-    const dragElement = function(e:DragEvent,focusData:any){
-      console.log(e.target)
-      const target = e.target as HTMLElement
-      e.dataTransfer!.setData('text/plain',focusData)
-      console.log(e.dataTransfer!.getData('text/plain'))
-      console.log(target!.getAttribute('data-id'))
-      e.dataTransfer!.effectAllowed='move'
+    const dragElement = function (e: DragEvent, focusData: any) {
+      console.log(e.target);
+      const target = e.target as HTMLElement;
+      e.dataTransfer!.setData("text/plain", focusData);
+      console.log(e.dataTransfer!.getData("text/plain"));
+      console.log(target!.getAttribute("data-id"));
+      e.dataTransfer!.effectAllowed = "move";
       containerRef.value?.addEventListener("dragenter", dragenter);
       containerRef.value?.addEventListener("dragover", dragover);
       containerRef.value?.addEventListener("dragleave", dragleave);
-    }
+    };
     // 移动信息
     type dragState = {
       startX: number;

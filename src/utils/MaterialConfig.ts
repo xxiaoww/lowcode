@@ -80,7 +80,11 @@ registerConfig.register({
   key: "text",
   icon: "icon-wenben",
   body: [],
-  props: {},
+  props: {
+    text: "文本内容",
+    type: "text",
+    options: [],
+  },
 });
 // 按钮
 registerConfig.register({
@@ -91,7 +95,9 @@ registerConfig.register({
   icon: "icon-anniu",
   body: [],
   props: {
-    text: "输入文本内容",
+    text: "按钮",
+    type: "text",
+    options: [],
   },
 });
 // 输入框
@@ -102,7 +108,11 @@ registerConfig.register({
   key: "input",
   icon: "icon-m-xialakuang",
   body: [],
-  props: {},
+  props: {
+    text: "输入框内容",
+    type: "text",
+    options: [],
+  },
 });
 // 按钮组件
 registerConfig.register({
@@ -117,7 +127,11 @@ registerConfig.register({
   key: "buttonGroup",
   icon: "icon-button-group",
   body: [],
-  props: {},
+  props: {
+    text: "按钮组件",
+    type: "text",
+    options: [],
+  },
 });
 // 单选框
 registerConfig.register({
@@ -138,5 +152,9 @@ registerConfig.register({
   key: "radio",
   icon: "icon-danxuankuang",
   body: [],
-  props: {},
+  props: {
+    text: "单选框内容",
+    type: "text",
+    options: [],
+  },
 });

@@ -1,23 +1,88 @@
 <template>
-  <div class="containerSetting">
-    容器宽度<input type="text" v-model="width" />
-    <br />
-    容器高度<input type="text" v-model="height" />
-  </div>
+  <template v-if="!onClick">
+    <div class="containerSetting">
+      容器宽度<input type="text" v-model="width" />px
+      <br />
+      容器高度<input type="text" v-model="height" />px
+    </div>
+  </template>
+  <template v-if="onClick">
+    <div class="componentSetting">
+      <div class="text">{{ text }}</div>
+      <input :type="type" />
+    </div>
+  </template>
 </template>
 
 <script>
 // 获取用户选中的组件，在右侧展示组件的配置信息
-import { defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 
 import useData from "../stores/data";
 //获取选中的组件
 import { useFocus } from "./useFocus"; //为啥要有{}
+import { textProps } from "element-plus";
 export default defineComponent({
   name: "EditorOperator",
   setup() {
-    let width = ref(`${useData().state.container.width}px`);
-    let height = ref(`${useData().state.container.height}px`);
+    //控制显示的是组件的还是最外面容器的
+    let onClick = ref(false); //默认没有点击组件
+
+    //显示的文本、input类型
+    let text = ref("");
+    let type = ref("");
+    // let text = null;
+    // let type = null;
+    watch(
+      () => {
+        return useFocus().focusData.value.focus.length;
+      },
+      (newValue) => {
+        if (newValue > 0) {
+          onClick.value = true;
+          // text = computed(() => {
+          //   return useFocus().focusData.value.focus[0].props.text;
+          // });
+          // type = computed(() => {
+          //   return useFocus().focusData.value.focus[0].props.type;
+          // });
+          // return { text, type };
+          text.value = useFocus().focusData.value.focus[0];
+          // type.value = useFocus().focusData.value.focus[0].props.type;
+          // text.value = "11";
+        } else {
+          onClick.value = false;
+        }
+      }
+    );
+
+    const width = computed({
+      get() {
+        return useData().state.container.width;
+      },
+      set(value) {
+        useData().state.container.width = Number(value);
+      },
+    });
+    const height = computed({
+      get() {
+        return useData().state.container.height;
+      },
+      set(value) {
+        useData().state.container.height = Number(value);
+      },
+    });
+
+    // watch(
+    //   () => {
+    //     return { width, height };
+    //   },
+    //   (newFocus) => {
+    //     useData().state.container.width = newFocus.width.value;
+    //     useData().state.container.height = newFocus.height.value;
+    //   },
+    //   { immediate: true } // 如果需要初始设置 content
+    // );
     // const dynamicComponent = ref(null);
     // const dynamicProps = ref({});
     // // 创建一个容器设置的组件
@@ -84,7 +149,7 @@ export default defineComponent({
     // // }
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
     // // content.value = foucsCom ? foucsCom.label : "";
-    return { width, height };
+    return { width, height, onClick, text, type };
   },
 });
 </script>
