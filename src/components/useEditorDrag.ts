@@ -1,4 +1,5 @@
-export function useEditorDrag(e:DragEvent,focusData:any){
+import { lookforId } from "./useLookforId"
+export function useEditorDrag(){
     const dragenter = function(e:DragEvent){
 
     }
@@ -11,7 +12,14 @@ export function useEditorDrag(e:DragEvent,focusData:any){
     const drop = function(e:DragEvent){
 
     }
-    let dragstart = function(e:DragEvent){
+    let dragaction= function(e:DragEvent,focusData:any){
+        console.log(e.target)
+        const target = e.target as HTMLElement
+        e.dataTransfer!.setData('text/plain',focusData)
+        console.log(e.dataTransfer!.getData('text/plain'))
+        console.log(target!.getAttribute('data-id'))
+        const id = target!.getAttribute('data-id')
+        lookforId(id!)
         // 获取选中的组件
         const focus = focusData.focus
         // 过进行拖拽的元素添加的事件是dragstart，drag，dragend
@@ -22,4 +30,7 @@ export function useEditorDrag(e:DragEvent,focusData:any){
 
         
     }
+    return {
+        dragaction
+    };
 }

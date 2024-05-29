@@ -43,7 +43,7 @@
               :data-id="block.id"
               @mousedown="block.focus?'':onmousedown($event, block, block.id)"
               :class="block.focus ? 'editor-block-focus' : ''"
-              @dragstart="dragElement($event,focusData)"
+              @dragstart="dragaction($event,focusData)"
               :drag=false
             ></EditorBlock>
           </div>
@@ -69,7 +69,7 @@ import "./editor.less";
 import { useFocus } from "./useFocus";
 // 引入
 import { v4 as uuid } from "uuid";
-
+import {lookforId} from './useLookforId'
 //引入菜单组件
 import Menu from "./Menu.vue";
 // console.log(AppData)
@@ -79,7 +79,8 @@ import useData from "../stores/data"; //useData().state就是data.json的内容
 
 import { events } from "./event";
 import { editorClick } from "./editorClick";
-
+// 引入编辑器内的拖拽函数
+import {useEditorDrag} from './useEditorDrag'
 export default defineComponent({
   name: "Editor",
   components: {
@@ -336,31 +337,22 @@ export default defineComponent({
 
     // 编辑器内的拖拽
     // 开始拖拽的函数
-    const dragElement = function(e:DragEvent,focusData:any){
-      console.log(e.target)
-      const target = e.target as HTMLElement
-      e.dataTransfer!.setData('text/plain',focusData)
-      console.log(e.dataTransfer!.getData('text/plain'))
-      console.log(target!.getAttribute('data-id'))
-      e.dataTransfer!.effectAllowed='move'
-      containerRef.value?.addEventListener("dragenter", dragenter);
-      containerRef.value?.addEventListener("dragover", dragover);
-      containerRef.value?.addEventListener("dragleave", dragleave);
-    }
-    // 移动信息
-    type dragState = {
-      startX: number;
-      startY: number;
-      startPos: any[];
-    };
-    let drags: dragState;
-    // function findTargetElement(x:number, y:number) {
-    //     const elements = Array.from(container.getElementsByClassName("draggable"));
-    //     return elements.find((element:HTMLElement) => {
-    //         const rect = element.getBoundingClientRect();
-    //         return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-    //     });
+    let {dragaction} = useEditorDrag()
+    
+    // const dragElement = function(e:DragEvent,focusData:any){
+    //   console.log(e.target)
+    //   const target = e.target as HTMLElement
+    //   e.dataTransfer!.setData('text/plain',focusData)
+    //   console.log(e.dataTransfer!.getData('text/plain'))
+    //   console.log(target!.getAttribute('data-id'))
+    //   const id = target!.getAttribute('data-id')
+    //   lookforId(id!)
+    //   e.dataTransfer!.effectAllowed='move'
+    //   containerRef.value?.addEventListener("dragenter", dragenter);
+    //   containerRef.value?.addEventListener("dragover", dragover);
+    //   containerRef.value?.addEventListener("dragleave", dragleave);
     // }
+
     // 移动的时候
     const mousemove = (e: DragEvent) => {
       // let {clientX:moveX,clientY:moveY} = e
@@ -420,7 +412,8 @@ export default defineComponent({
       onmousedown,
       clearBlockFocus,
       editorClick,
-      dragElement,
+      // dragElement,
+      dragaction,
       focusData,
     };
   },
