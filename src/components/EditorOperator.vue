@@ -6,10 +6,30 @@
       容器高度<input type="text" v-model="height" />px
     </div>
   </template>
-  <template v-if="onClick">
+  <template v-else>
     <div class="componentSetting">
       <div class="text">{{ text }}</div>
-      <input :type="type" />
+      <!-- 遍历props对象,渲染每一个值，判断对应的类型进行渲染 -->
+
+      <!-- props的类型 -->
+      <template v-for="(p, index) in propsContent" :key="index">
+        <ElFormItem :label="p.label">
+          <ElInput v-if="p.type === 'input'"></ElInput>
+          <ElColorPicker v-if="p.type === 'color'"></ElColorPicker>
+          <ElSelect v-if="p.type === 'select'">
+            <ElOption
+              v-for="(opt, index) in p.option"
+              :key="index"
+              :label="opt.label"
+              :value="opt.value"
+              >{{ opt.label }}
+            </ElOption>
+          </ElSelect>
+        </ElFormItem>
+      </template>
+
+      <!-- model的类型 -->
+      <template>111</template>
     </div>
   </template>
 </template>
@@ -17,13 +37,28 @@
 <script>
 // 获取用户选中的组件，在右侧展示组件的配置信息
 import { computed, defineComponent, inject, ref, watch } from "vue";
-
+import {
+  ElButton,
+  ElFormItem,
+  ElInput,
+  ElColorPicker,
+  ElSelect,
+  ElOption,
+} from "element-plus";
 import useData from "../stores/data";
 //获取选中的组件
 import { useFocus } from "./useFocus"; //为啥要有{}
 import { textProps } from "element-plus";
 export default defineComponent({
   name: "EditorOperator",
+  components: {
+    ElButton,
+    ElFormItem,
+    ElInput,
+    ElColorPicker,
+    ElSelect,
+    ElOption,
+  },
   setup() {
     //引入config
     const config = inject("config");
@@ -34,6 +69,8 @@ export default defineComponent({
     //显示的文本、input类型
     let text = ref("");
     let type = ref("");
+
+    let propsContent = ref([]);
     // let text = null;
     // let type = null;
     watch(
@@ -58,7 +95,9 @@ export default defineComponent({
               return item;
             }
           });
-          text.value = comProps[0].props;
+          //拿到对应props对象的所有key对应的值的数组，然后遍历渲染
+          text.value = Object.values(comProps[0].props);
+          propsContent.value = Object.values(comProps[0].props);
           // type.value = useFocus().focusData.value.focus[0].props.type;
           // text.value = "11";
         } else {
@@ -160,7 +199,20 @@ export default defineComponent({
     // // }
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
     // // content.value = foucsCom ? foucsCom.label : "";
-    return { width, height, onClick, text, type };
+    return {
+      width,
+      height,
+      onClick,
+      text,
+      type,
+      propsContent,
+      ElButton,
+      ElFormItem,
+      ElInput,
+      ElColorPicker,
+      ElSelect,
+      ElOption,
+    };
   },
 });
 </script>
