@@ -21,7 +21,7 @@
           <!-- 输入框的 (model) -->
           <ElInput v-if="p.model" v-model="p.model.default"></ElInput>
           <!-- 只是输入内容 -->
-          <ElInput v-if="p.type === 'input'"></ElInput>
+          <ElInput v-if="p.type === 'input'" v-model="editText"></ElInput>
 
           <ElColorPicker v-if="p.type === 'color'"></ElColorPicker>
           <ElSelect v-if="p.type === 'select'">
@@ -37,6 +37,11 @@
       </template>
     </div>
   </template>
+
+  <ElFormItem>
+    <ElButton type="primary">应用</ElButton>
+    <ElButton>重置</ElButton>
+  </ElFormItem>
 </template>
 
 <script>
@@ -54,6 +59,7 @@ import useData from "../stores/data";
 //获取选中的组件
 import { useFocus } from "./useFocus"; //为啥要有{}
 import { textProps } from "element-plus";
+import { h } from "vue";
 export default defineComponent({
   name: "EditorOperator",
   components: {
@@ -76,22 +82,76 @@ export default defineComponent({
     let type = ref("");
 
     let propsContent = ref([]);
+    let editText = ref(""); //响应输入文本
     watch(
       () => {
         return useFocus().focusData.value.focus.length;
       },
       (newValue) => {
+        //判断是否有点击的组件，有的话就标记onClick
         if (newValue > 0) {
           onClick.value = true;
+
           // 获取该block的key
           let comKey = useFocus().focusData.value.focus[0].key;
+          //通过key拿到对应props
           let comProps = config.componentList.filter((item) => {
             if (item.key === comKey) {
               return item;
             }
           });
-          //拿到对应props对象的所有key对应的值的数组，然后遍历渲染
+
+          useFocus().focusData.value.focus[0].style = {
+            width: "200px",
+            color: "red",
+            height: "300px",
+          };
+
+          // console.log(comProps[0].render());
+
+          // 获取该block的props（是渲染的，不是配置的
+          // let bloProp = useFocus().focusData.value.focus[0].props;
+
+          // （（（（（（（（（（（（（（（（
+          // 改变editor.vue里面的props?怎么赋值给已渲染的组件
+          // useFocus().focusData.value.focus[0].props = {
+          //   text: "2222",
+          // };
+
+          text.value = useFocus().focusData.value.focus[0].props;
+          // text.value = comProps[0].render().children; //comProps[0].render().children是渲染的默认文本
+
+          //文本部分默认是渲染的默认文本
+          editText.value = comProps[0].render().children;
+
+          // let resetText = (key) => {
+          //   if (key === "button") {
+          //     comProps[0].render = () => h(ElButton, {}, editText.value);
+          //   } else if (key === "text") {
+          //     comProps[0].render = () => h("span", {}, editText.value);
+          //   } else if (key === "radio") {
+          //     comProps[0].render = () =>
+          //       h("div", { class: "mb-2 flex items-center text-sm" }, [
+          //         h(
+          //           ElRadioGroup,
+          //           {
+          //             class: "ml-4",
+          //           },
+          //           [
+          //             h(ElRadio, { value: "1", size: "large" }, "选择1"),
+          //             h(ElRadio, { value: "2", size: "large" }, "选择2"),
+          //           ]
+          //         ),
+          //       ]);
+          //   }
+          // };
+          //判断key类型,从而修改对应的文本部分
+          // resetText(comKey);
+          //修改渲染函数render
+
           // text.value = Object.values(comProps[0].props);
+
+          //拿到对应props对象的所有key对应的值的数组，然后v-for遍历渲染
           propsContent.value = Object.values(comProps[0].props);
         } else {
           onClick.value = false;
@@ -116,6 +176,23 @@ export default defineComponent({
       },
     });
 
+    // watch(
+    //   () => {
+    //     return editText.value;
+    //   },
+    //   (newValue) => {
+    //     // useFocus().focusData.value.focus[0].value = newValue;
+    //     console.log(useFocus().focusData.value.focus[0].render);
+    //   }
+    // );
+
+    let confirmUse = (blockProp) => {
+      //遍历当前组件的props对象，拿到每个key,设置对应的值
+      Object.keys(blockProp).forEach((key) => {
+        // blockProp.style[key] =
+      });
+    };
+
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
     return {
       width,
@@ -130,6 +207,7 @@ export default defineComponent({
       ElColorPicker,
       ElSelect,
       ElOption,
+      editText,
     };
   },
 });

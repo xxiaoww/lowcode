@@ -196,6 +196,7 @@ export default defineComponent({
               focus: false,
               body: [],
               props: {},
+              style: {},
             },
           ];
         }
@@ -223,6 +224,7 @@ export default defineComponent({
             focus: false,
             body: blockBody,
             props: {},
+            style: {},
           },
         ],
       };

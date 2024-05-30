@@ -49,6 +49,7 @@ export default defineComponent({
     block: {
       type: Object as () => Block,
     },
+    // dataId: { type: String as () => string },
     // datas:{
     //   type: Object as () => AppData
     // }
@@ -56,6 +57,7 @@ export default defineComponent({
   setup(props, context) {
     // let datas = props.datas
     // console.log(props.datas);
+    console.log(props.block!.id);
     console.log(useData().state);
     // 获取组件
     const config = inject<RegisterConfig>("config");
@@ -90,14 +92,45 @@ export default defineComponent({
     console.log(data);
     const blockStyles: ComputedRef<CSSProperties> = computed(() => {
       if (!props.block) {
-        return {};
+        return {} as CSSProperties;
       }
-      return {
-        top: `${props.block.top}px`,
-        left: `${props.block.left}px`,
-        zIndex: `${props.block.zIndex}`,
-      };
+      // return {
+      //   top: `${props.block.top}px`,
+      //   left: `${props.block.left}px`,
+      //   zIndex: `${props.block.zIndex}`,
+      //   width: `22px`,
+      //   // ...Object.values(props.block.style),
+      // };
+      // console.log(
+      // useData().state.blocks.forEach((block) => {
+      //   if (block.id === props.dataId) {
+      //     alert(1);
+      //   }
+      // })
+      // props.dataId,
+      //   useData().state.blocks
+      // );
+      return props.block.style as CSSProperties;
+      // let blockStyles = computed(() => {
+      //   if (!props.block) {
+      //     return {};
+      //   }
+      //   // 拿到blocks里面对应这个id的block的style、，
+
+      //   // useData().state.blocks.filter(block=>block.id === props.dataId)[0]是拿到渲染区中这个元素
+      //   return useData().state.blocks.filter(
+      //     (block) => block.id === props.dataId
+      //   )[0].style;
+      // });
     });
+    // console.log(props.block.style);
+
+    // const blockStyles = computed(() => {
+    //   if (!props.block) {
+    //     return {};
+    //   }
+    //   return props.block.style;
+    // });
 
     // 焦点
 
