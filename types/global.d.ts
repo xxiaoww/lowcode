@@ -27,7 +27,6 @@
 //     };
 //   }
 
-
 // export interface componentProps {
 //     type: 'input' | 'color' | 'select' | 'table';
 //     label: string;
@@ -54,58 +53,63 @@
 //   register: (component: componentConfig) => void;
 // }
 
-
-import {VNode, RendererNode, RendererElement} from "vue"
-  // block的
-  export interface Block {
-    top?: number;
-    left?: number;
-    zIndex?: number;
-    key?: string;
-    alignCenter?:boolean;
-    focus?:boolean;
-    id?:string;
-  style?:object;
-    props?: {
-      text?: string;
-      type?: string;
-      size?: string;
-      options?: any[];
-    };
-    model?: {
-      defalut?: string;
-    };
-    body?:any[],
-  }
+import { VNode, RendererNode, RendererElement } from "vue";
+// block的
+export interface Block {
+  top?: number;
+  left?: number;
+  zIndex?: number;
+  key?: string;
+  alignCenter?: boolean;
+  focus?: boolean;
+  id?: string;
+  style?: object;
+  props?: {
+    text?: string;
+    type?: string;
+    size?: string;
+    options?: any[];
+  };
+  model?: {
+    defalut?: string;
+  };
+  body?: any[];
+}
 export interface AppData {
-      container: {
-        width: string;
-        height: string;
-      };
-      blocks: Block[];
-    };
-
+  container: {
+    width: string;
+    height: string;
+  };
+  blocks: Block[];
+}
 
 export interface componentProps {
-    type: 'input' | 'color' | 'select' | 'table';
-    label: string;
+  type: "input" | "color" | "select" | "table";
+  label: string;
 
-    options?: { label: string, value: string }[];
-    table?: {
-        options: { label: string, field: string }[];
-        key: string
-    };
-};
+  options?: { label: string; value: string }[];
+  table?: {
+    options: { label: string; field: string }[];
+    key: string;
+  };
+}
 // 配置组件的
 export interface componentConfig {
-    label: string;
-    preview?: () => HTMLElement|VNode<RendererNode, RendererElement, { [key: string]: any }>;
-    render: (props: { props: Record<string, any>; model: Record<string, any> }) => HTMLElement|VNode<RendererNode, RendererElement, { [key: string]: any }>;
-    key: string;
-    icon:string;
-    body?:any[];
+  label: string;
+  preview?: () =>
+    | HTMLElement
+    | VNode<RendererNode, RendererElement, { [key: string]: any }>;
+  render: (props: {
     props: Record<string, any>;
-    model?: Record<string, string>
+    model: Record<string, any>;
+  }) =>
+    | HTMLElement
+    | VNode<RendererNode, RendererElement, { [key: string]: any }>;
+  key: string;
+  icon: string;
+  body?: any[];
+  props: Record<string, any>;
+  model?: Record<string, string>;
 }
 // 集合
 export interface RegisterConfig {
@@ -115,27 +119,27 @@ export interface RegisterConfig {
 }
 
 //菜单操作command的配置
-export interface Command{
-  name:string,
-  keyboard?:string,
-  pushQueue?:boolean,
+export interface Command {
+  name: string;
+  keyboard?: string;
+  pushQueue?: boolean;
   // init():{
-  //   before:string 
+  //   before:string
   // },
-  before?:any,
-  init?():() => void,
-  execute(...args: any[]):{
-    redo:()=> void,
-    undo?:()=> void
-  }
+  before?: any;
+  init?(): () => void;
+  execute(...args: any[]): {
+    redo: () => void;
+    undo?: () => void;
+  };
 }
 
 //useCommand里面的state
 export interface State {
-  current:number,
-  queue:object[{undo:function,redo:function}],
+  current: number;
+  queue: object[{ undo: function; redo: function }];
 
-  commands:{[key:string]:() => void},
-  commandArray:command[],
-  destroyArray:function[],//这个不知道是不是
+  commands: { [key: string]: () => void };
+  commandArray: command[];
+  destroyArray: function[]; //这个不知道是不是
 }
