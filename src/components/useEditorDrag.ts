@@ -44,7 +44,7 @@ let x=0,y = 0
     father.parentNode!.insertBefore(dragElement!, father.nextSibling);
       }
     }
-    // 2.如果是其他类型的组件
+    // 2.如果是其他类型的
     
   };
   const dragover = function (e: DragEvent) {
