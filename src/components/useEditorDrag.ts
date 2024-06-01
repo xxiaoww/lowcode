@@ -5,7 +5,10 @@ export function useEditorDrag() {
 let dragElement:null|HTMLElement = null
 // 记录鼠标在拖动元素上的位置信息
 let x=0,y = 0
-
+// 占位元素
+let placeholder:null|HTMLElement = null
+// 是否正在拖拽
+let dragging:boolean = false
   const dragenter = function (e: DragEvent) {
     console.log(e)
     console.log(e.target)
@@ -25,25 +28,52 @@ let x=0,y = 0
     // console.log(father!.offsetTop,father!.offsetLeft)
 
 
-
-
+    x = e.clientX - x
+    y = e.clientY - y
+      // 设置元素的新位置
+      // dragElement!.style.transform = `translate(${x}px, ${y}px)`;
 
     // 感觉可以通过几次判断
     // 1.拖拽元素其实还未在过程元素的上方，这时候可以通过判断鼠标的e.clientY和元素的offsetTop来比较
     // 此外还要判断进入的元素是否是flex盒子，或者container盒子，
     // 分别判断鼠标在元素的上方和鼠标在元素的下方（所以要用到height）
-    if(key !=='container' && key !=='flex'&& key!=='latercontainer') {
-      if(distance<= 5) {
-        // 不可以用dataTransfer，因为在dragover这个函数是只读的，无法直接修改
-        // e.dataTransfer?.dropEffect = 'move'
-      // 鼠标在元素上方
-      father.parentNode!.insertBefore(dragElement!, father);
-      }else if(distance>=(height - 5)){
-        console.log(1111)
-        // 鼠标在元素下方
-    father.parentNode!.insertBefore(dragElement!, father.nextSibling);
-      }
-    }
+    
+      const rect = dragElement!.getBoundingClientRect();
+      placeholder = document.createElement("div")
+      placeholder.classList.add("placeholder")  
+       // 保持占位元素与拖动元素一样大小
+       placeholder.style.width = rect.width + 'px';
+       placeholder.style.height = rect.height + 'px';
+    console.log(dragging)
+       if(!dragging){
+        dragging = true;
+        dragElement!.style.width = "0px"
+        dragElement!.style.height = "0px"
+        // dragElement?.parentNode?.insertBefore(placeholder,dragElement)
+        dragElement?.parentNode!.insertBefore(placeholder,dragElement.nextSibling);
+       }
+        if(key !=='container' && key !=='flex'&& key!=='latercontainer') {
+          if(distance<= 5) {
+            // 不可以用dataTransfer，因为在dragover这个函数是只读的，无法直接修改
+            // e.dataTransfer?.dropEffect = 'move'
+          // 鼠标在元素上方
+            // 添加一个占位元素
+          // 插入占位元素
+            console.log(1111)
+          father.parentNode!.insertBefore(dragElement!, father);
+          
+          }else if(distance>=(height - 5)){
+            console.log(1111)
+            // 鼠标在元素下方
+            // 插入占位元素
+  
+        father.parentNode!.insertBefore(dragElement!, father.nextSibling);
+          }
+        }
+       
+    
+    
+    
     // 2.如果是其他类型的
     
   };
@@ -59,12 +89,21 @@ let x=0,y = 0
     father.style.border = '0px'
   };
   const drop = function (e: DragEvent) {
+    let place = placeholder!.getBoundingClientRect()
+    dragElement!.style.width = place.width+'px'
+        dragElement!.style.height = place.height+'px'
     if (dragElement) {
+    dragElement!.style.opacity = "1"
+
       dragElement.style.removeProperty('top');
       dragElement.style.removeProperty('left');
       dragElement.style.removeProperty('position');
     }
     dragElement = null;
+    // 拖动结束清除占位元素
+    document.querySelector('.placeholder')?.remove()
+    // placeholder && placeholder!.parentNode!.removeChild(placeholder);
+    dragging = false;
     document.removeEventListener('dragenter', dragenter);
     document.removeEventListener('dragover', dragover);
     document.removeEventListener('drop', drop);
@@ -82,8 +121,8 @@ let x=0,y = 0
 
     dragElement = e.target as HTMLElement;
     const rect = dragElement.getBoundingClientRect();
-    x = e.clientX - rect.left
-    y = e.clientY - rect.top
+    // x = e.clientX - dragElement.offsetLeft;
+    // y = e.clientY - dragElement.offsetTop;
     lookforId(id!);
     // 获取选中的组件
     const focus = focusData.focus;

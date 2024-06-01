@@ -110,3 +110,9 @@
   box-sizing: border-box;
   border: 2px solid #205dd9;
 }
+.placeholder {
+  box-sizing: border-box;
+  background-color: #edf2f7;
+  margin: 10px 0;
+  border: 2px dashed #cbd5e0;
+}
