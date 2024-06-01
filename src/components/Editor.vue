@@ -76,7 +76,7 @@ import "./editor.less";
 import { useFocus } from "./useFocus";
 // 引入
 import { v4 as uuid } from "uuid";
-
+import {lookforId} from './useLookforId'
 //引入菜单组件
 import Menu from "./Menu.vue";
 // console.log(AppData)
@@ -86,6 +86,7 @@ import useData from "../stores/data"; //useData().state就是data.json的内容
 
 import { events } from "./event";
 import { editorClick } from "./editorClick";
+
 // import EditorOperatorVue from "./EditorOperator.vue";
 
 // 引入编辑器内的拖拽函数
@@ -348,6 +349,7 @@ export default defineComponent({
 
     // 编辑器内的拖拽
     // 开始拖拽的函数
+
     let { dragstart: dragElement } = useEditorDrag();
     // const dragElement = function (e: DragEvent, focusData: any) {
     //   console.log(e.target);
@@ -374,6 +376,7 @@ export default defineComponent({
     //         return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
     //     });
     // }
+
     // 移动的时候
     const mousemove = (e: DragEvent) => {
       // let {clientX:moveX,clientY:moveY} = e

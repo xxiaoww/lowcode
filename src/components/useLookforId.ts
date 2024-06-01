@@ -4,12 +4,15 @@ import { Block } from "../../types/global";
 export function lookforId(id: string) {
   com(useData().state!.blocks, id);
 }
-function com(block: Block[], id: string) {
-  block.forEach((block: Block) => {
-    if (block.id === id) {
-      console.log(id);
-    } else if (block.body!.length > 0 && Array.isArray(block.body)) {
-      com(block.body, id);
-    }
-  });
+
+
+function com(block:Block[],id:string){
+    block.forEach((block:Block)=>{
+        if(block.id === id){
+            console.log(id) 
+        }else if (block.body!.length>0 && Array.isArray(block.body)){
+            com(block.body,id)
+        }
+    })
 }
+
