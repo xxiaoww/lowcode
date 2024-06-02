@@ -9,6 +9,8 @@ let x=0,y = 0
 let placeholder:null|HTMLElement = null
 // 是否正在拖拽
 let dragging:boolean = false
+// 记录当前进入的元素
+let dragenterElement:null|HTMLElement = null
   const dragenter = function (e: DragEvent) {
     console.log(e)
     console.log(e.target)
@@ -18,6 +20,8 @@ let dragging:boolean = false
     // 获取拖拽进入的元素editor-block父元素的offsetTop和offsetLeft
     const target = e.target as HTMLElement;
     const father = target.closest('.editor-block') as HTMLElement;
+    // 给目标元素添加dragover事件
+    father.addEventListener('dragover',dragover)
     father.style.border = '2px dashed #ccc'; // 设置拖放目标的边框样式
     const top = father.offsetTop
     const height = father.offsetHeight
@@ -89,34 +93,43 @@ let dragging:boolean = false
     father.style.border = '0px'
   };
   const drop = function (e: DragEvent) {
-    let place = placeholder!.getBoundingClientRect()
-    dragElement!.style.width = place.width+'px'
-        dragElement!.style.height = place.height+'px'
+    e.preventDefault();
+    const place = placeholder!.getBoundingClientRect();
+    dragElement!.style.width = place.width + 'px';
+    dragElement!.style.height = place.height + 'px';
     if (dragElement) {
-    dragElement!.style.opacity = "1"
-
+      dragElement.style.opacity = "1";
       dragElement.style.removeProperty('top');
       dragElement.style.removeProperty('left');
       dragElement.style.removeProperty('position');
     }
     dragElement = null;
     // 拖动结束清除占位元素
-    document.querySelector('.placeholder')?.remove()
-    // placeholder && placeholder!.parentNode!.removeChild(placeholder);
+    placeholder?.remove();
     dragging = false;
-    document.removeEventListener('dragenter', dragenter);
-    document.removeEventListener('dragover', dragover);
-    document.removeEventListener('drop', drop);
+  
   };  
+  const dragEnd= function(e:DragEvent){
+    const editorblock = document.querySelectorAll('.editor-block')
+    console.log(editorblock)
+    const target = e.target as HTMLInputElement
+    console.log(target)
+      target.removeEventListener("dragenter",dragenter as (this: Element, ev: Event) => any);
+      target.removeEventListener("dragover",dragover as (this: Element, ev: Event) => any);
+      target.removeEventListener("dragleave",dragleave as (this: Element, ev: Event) => any);
+
+      target.removeEventListener("drop",drop as (this: Element, ev: Event) => any);
+    
+  }
   let dragstart = function (e: DragEvent,focusData:any) {
     // e.dataTransfer!.effectAllowed = 'move'
     console.log(e.target);
     const target = e.target as HTMLElement;
     target.style.opacity = "0.5"
     e.dataTransfer!.setData("text/plain", focusData);
-    console.log(e.dataTransfer!.getData("text/plain"));
+    // console.log(e.dataTransfer!.getData("text/plain"));
     
-    console.log(target!.getAttribute("data-id"));
+    // console.log(target!.getAttribute("data-id"));
     const id = target!.getAttribute("data-id");
 
     dragElement = e.target as HTMLElement;
@@ -135,12 +148,12 @@ let dragging:boolean = false
       editorblock[i].addEventListener("dragenter",dragenter as (this: Element, ev: Event) => any);
       editorblock[i].addEventListener("dragover",dragover as (this: Element, ev: Event) => any);
       editorblock[i].addEventListener("dragleave",dragleave as (this: Element, ev: Event) => any);
-
       editorblock[i].addEventListener("drop",drop as (this: Element, ev: Event) => any);
     }
     // 给目标元素添加的是drop事件，dragover事件（这个事件为拖拽元素进入到目标元素的时候触发的函数，并且执行阻止默认行为
   };
   return {
-    dragstart
+    dragstart,
+    dragEnd
   }
 }
