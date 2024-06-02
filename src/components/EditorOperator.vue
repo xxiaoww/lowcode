@@ -12,6 +12,9 @@
   </template>
   <template v-else>
     <div class="componentSetting">
+      <!-- 用于测试，可删 -->
+      <!-- <div class="a" v-for="(p, index) in keyName" :key="index">{{ p }}</div> -->
+
       <div class="text">{{ text }}</div>
       <!-- 遍历props对象,渲染每一个值，判断对应的类型进行渲染 -->
 
@@ -19,12 +22,24 @@
       <template v-for="(p, index) in propsContent" :key="index">
         <ElFormItem :label="p.label">
           <!-- 输入框的 (model) -->
-          <ElInput v-if="p.model" v-model="p.model.default"></ElInput>
+          <ElInput
+            v-if="p.model"
+            v-model="state.editData.props[keyName[index]]"
+          ></ElInput>
           <!-- 只是输入内容 -->
-          <ElInput v-if="p.type === 'input'" v-model="editText"></ElInput>
+          <ElInput
+            v-if="p.type === 'input'"
+            v-model="state.editData.props[keyName[index]]"
+          ></ElInput>
 
-          <ElColorPicker v-if="p.type === 'color'"></ElColorPicker>
-          <ElSelect v-if="p.type === 'select'">
+          <ElColorPicker
+            v-if="p.type === 'color'"
+            v-model="state.editData.props[keyName[index]]"
+          ></ElColorPicker>
+          <ElSelect
+            v-if="p.type === 'select'"
+            v-model="state.editData.props[keyName[index]]"
+          >
             <ElOption
               v-for="(opt, index) in p.option"
               :key="index"
@@ -39,14 +54,14 @@
   </template>
 
   <ElFormItem>
-    <ElButton type="primary">应用</ElButton>
+    <ElButton type="primary" @click="apply()">应用</ElButton>
     <ElButton>重置</ElButton>
   </ElFormItem>
 </template>
 
 <script>
 // 获取用户选中的组件，在右侧展示组件的配置信息
-import { computed, defineComponent, inject, ref, watch } from "vue";
+import { computed, defineComponent, inject, ref, watch, reactive } from "vue";
 import {
   ElButton,
   ElFormItem,
@@ -60,6 +75,8 @@ import useData from "../stores/data";
 import { useFocus } from "./useFocus"; //为啥要有{}
 import { textProps } from "element-plus";
 import { h } from "vue";
+import useCommand from "../components/useCommand.ts";
+
 export default defineComponent({
   name: "EditorOperator",
   components: {
@@ -71,6 +88,9 @@ export default defineComponent({
     ElOption,
   },
   setup() {
+    console.log(useCommand());
+    let { commands } = useCommand();
+    console.log(commands.updateBlock);
     //引入config
     const config = inject("config");
 
@@ -83,6 +103,17 @@ export default defineComponent({
 
     let propsContent = ref([]);
     let editText = ref(""); //响应输入文本
+
+    let keyName = ref("");
+
+    //定义一个对象用于放新props
+    const state = reactive({
+      editData: {
+        props: {},
+      },
+    });
+    // state.editData.props;
+
     watch(
       () => {
         return useFocus().focusData.value.focus.length;
@@ -124,6 +155,10 @@ export default defineComponent({
           //文本部分默认是渲染的默认文本
           editText.value = comProps[0].render().children;
 
+          // if(comKey == 'input'){
+
+          // }
+
           // let resetText = (key) => {
           //   if (key === "button") {
           //     comProps[0].render = () => h(ElButton, {}, editText.value);
@@ -150,9 +185,13 @@ export default defineComponent({
           //修改渲染函数render
 
           // text.value = Object.values(comProps[0].props);
+          text.value = state;
 
           //拿到对应props对象的所有key对应的值的数组，然后v-for遍历渲染
           propsContent.value = Object.values(comProps[0].props);
+
+          // obj.value = comProps[0].props;
+          keyName.value = Object.keys(comProps[0].props);
         } else {
           onClick.value = false;
         }
@@ -193,6 +232,29 @@ export default defineComponent({
       });
     };
 
+    const apply = () => {
+      //判断是容器还是组件
+      if (useFocus().focusData.value.focus.length > 0) {
+        //点击的是组件
+        // alert(1);
+        //下面这个先注释掉了
+        // commands.updateBlock(
+        //   state.editData,
+        //   useFocus().focusData.value.focus[0]
+        // );
+      } else {
+        //点击的是容器
+        alert(2);
+      }
+    };
+
+    // const apply = () => {
+    //         if (!props.block) {//更改组件容器的大小
+    //             props.updataContainer({...props.data,container:state.editData})
+    //         } else {//更改组件容器配置
+    //             props.updateBlock(state.editData,props.block)
+    //         }
+    //     }
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
     return {
       width,
@@ -208,6 +270,9 @@ export default defineComponent({
       ElSelect,
       ElOption,
       editText,
+      keyName,
+      state,
+      apply,
     };
   },
 });

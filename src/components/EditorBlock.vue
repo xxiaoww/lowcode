@@ -76,9 +76,10 @@ export default defineComponent({
     // let blockBody: Block[];
     // blockBody = block.value!.body || [];
     console.log(blockBody);
+
     let component = computed(() => {
       const componentKeys = Object.keys(config!.componentMap);
-      // console.log(componentKeys)
+      // console.log(componentKeys);
       for (const key of componentKeys) {
         // console.log(key)
         if (key === block.value!.key) {
@@ -86,6 +87,12 @@ export default defineComponent({
         }
       }
     });
+
+    //这里需要给render传个props，但是有bug
+    // const RenderComponent = component._value.render({
+    //   props: block.props,
+    // });
+
     console.log(component);
     console.log(props.block);
     const data: string = props.block!.key ?? " ";
