@@ -50,7 +50,8 @@
               "
               :class="block.focus ? 'editor-block-focus' : ''"
               @dragstart="dragElement($event, focusData)"
-              :drag="false"
+              @dragend="dragElementEnd($event)"
+              :drag="false" 
             ></EditorBlock>
           </div>
         </div>
@@ -350,7 +351,7 @@ export default defineComponent({
     // 编辑器内的拖拽
     // 开始拖拽的函数
 
-    let { dragstart: dragElement } = useEditorDrag();
+    let { dragstart: dragElement ,dragEnd:dragElementEnd} = useEditorDrag();
     // const dragElement = function (e: DragEvent, focusData: any) {
     //   console.log(e.target);
     //   const target = e.target as HTMLElement;
@@ -437,6 +438,7 @@ export default defineComponent({
       clearBlockFocus,
       editorClick,
       dragElement,
+      dragElementEnd,
       focusData,
     };
   },
