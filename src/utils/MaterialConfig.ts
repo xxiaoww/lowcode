@@ -103,7 +103,9 @@ registerConfig.register({
 registerConfig.register({
   label: "文本",
   preview: () => h("span", {}, "预览文本"),
-  render: () => h("span", { class: "text" }, "渲染文本"),
+  render:
+    // ({ props }) => h("span", { class: "text" }, props.text || "渲染文本"),
+    () => h("span", { class: "text" }, "渲染文本"),
   key: "text",
   icon: "icon-wenben",
   body: [],
@@ -189,6 +191,7 @@ registerConfig.register({
     ]),
   },
 });
+
 // 单选框
 registerConfig.register({
   label: "单选框",
