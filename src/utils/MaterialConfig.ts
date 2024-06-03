@@ -65,7 +65,7 @@ export let registerConfig = createEditorConfig();
 registerConfig.register({
   label: "flex布局",
   preview: () => h(ElInput, { placeholder: "预览输入框" }, ""),
-  render: () => h("div", { style: { display: "flex" } }),
+  render: ({ props = {} }) => h("div", { style: { display: "flex" } }),
   key: "flex",
   icon: "icon-anniu",
   body: [{ key: "container" }, { key: "container" }, { key: "container" }],
@@ -78,7 +78,7 @@ registerConfig.register({
 registerConfig.register({
   label: "容器",
   preview: () => h(ElInput, { placeholder: "预览输入框" }, ""),
-  render: () => h("div", { class: "contain " }, "内容区"),
+  render: ({ props = {} }) => h("div", { class: "contain " }, "内容区"),
   key: "container",
   icon: "icon-fangkuang",
   body: [],
@@ -90,7 +90,7 @@ registerConfig.register({
 // 另一个容器
 registerConfig.register({
   label: "小容器",
-  render: () => h("div"),
+  render: ({ props = {} }) => h("div"),
   key: "latercontainer",
   icon: "icon-fangkuang",
   body: [],
@@ -103,9 +103,44 @@ registerConfig.register({
 registerConfig.register({
   label: "文本",
   preview: () => h("span", {}, "预览文本"),
-  render:
-    // ({ props }) => h("span", { class: "text" }, props.text || "渲染文本"),
-    () => h("span", { class: "text" }, "渲染文本"),
+  // render: () => h("span", { class: "text" }, "渲染文本"),
+  // render: ({ props = {} }) =>
+  //   h(
+  //     "span",
+  //     {
+  //       style: { color: (props.color = ""), fontSize: (props.size = "") },
+  //       class: "text",
+  //     },
+  //     props.text || "渲染文本"
+  //   ),
+  render: ({ props = {} }) => {
+    if (props.color) {
+      alert(props.color);
+    }
+    const { color = "", size = "", text = "渲染文本" } = props;
+    return h(
+      "span",
+      {
+        style: { color, fontSize: size },
+        class: "text",
+      },
+      text
+    );
+  },
+  // render: ({
+  //   props = {} as { color?: string; size?: string; text?: string },
+  // }) => {
+  //   const { color = "", size = "", text = "渲染文本" } = props;
+  //   return h(
+  //     "span",
+  //     {
+  //       style: { color, fontSize: size },
+  //       class: "text",
+  //     },
+  //     text
+  //   );
+  // },
+
   key: "text",
   icon: "icon-wenben",
   body: [],
@@ -123,7 +158,7 @@ registerConfig.register({
 registerConfig.register({
   label: "按钮",
   preview: () => h(ElButton, {}, "预览按钮"),
-  render: () => h(ElButton, {}, "渲染按钮"),
+  render: ({ props = {} }) => h(ElButton, {}, "渲染按钮"),
   key: "button",
   icon: "icon-anniu",
   body: [],
@@ -147,7 +182,7 @@ registerConfig.register({
 registerConfig.register({
   label: "输入框",
   preview: () => h(ElInput, { placeholder: "预览输入框" }, ""),
-  render: () => h(ElInput, { placeholder: "渲染输入框" }, ""),
+  render: ({ props = {} }) => h(ElInput, { placeholder: "渲染输入框" }, ""),
   key: "input",
   icon: "icon-m-xialakuang",
   body: [],
@@ -165,7 +200,7 @@ registerConfig.register({
 // 按钮组件
 registerConfig.register({
   label: "按钮组件",
-  render: () =>
+  render: ({ props = {} }) =>
     h("div", { class: "container" }, [
       h(ElButtonGroup, null, [
         h(ElButton, { type: "primary" }, "按钮"),
@@ -195,7 +230,7 @@ registerConfig.register({
 // 单选框
 registerConfig.register({
   label: "单选框",
-  render: () =>
+  render: ({ props = {} }) =>
     h("div", { class: "mb-2 flex items-center text-sm" }, [
       h(
         ElRadioGroup,
