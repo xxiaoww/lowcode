@@ -62,8 +62,13 @@ export function useFocus(callback: any) {
       } else {
         unfocused.push(block);
       }
-      if (block.body!.length > 0 && Array.isArray(block.body)) {
-        com(block.body, focus, unfocused);
+      // if (block.body!.length > 0 && Array.isArray(block.body)) {
+      //   com(block.body, focus, unfocused);
+      // }
+      //更改：
+      if (block.body!) {
+        if (block.body!.length > 0 && Array.isArray(block.body))
+          com(block.body, focus, unfocused);
       }
     });
   }

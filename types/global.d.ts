@@ -100,8 +100,9 @@ export interface componentConfig {
     | HTMLElement
     | VNode<RendererNode, RendererElement, { [key: string]: any }>;
   render: (props: {
-    props: Record<string, any>;
-    model: Record<string, any>;
+    //修改了这个可选
+    props?: Record<string, any>;
+    model?: Record<string, any>;
   }) =>
     | HTMLElement
     | VNode<RendererNode, RendererElement, { [key: string]: any }>;

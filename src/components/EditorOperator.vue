@@ -113,7 +113,6 @@ export default defineComponent({
       },
     });
     // state.editData.props;
-
     watch(
       () => {
         return useFocus().focusData.value.focus.length;
@@ -153,7 +152,7 @@ export default defineComponent({
           // text.value = comProps[0].render().children; //comProps[0].render().children是渲染的默认文本
 
           //文本部分默认是渲染的默认文本
-          editText.value = comProps[0].render().children;
+          // editText.value = comProps[0].render().children;
 
           // if(comKey == 'input'){
 
@@ -187,17 +186,35 @@ export default defineComponent({
           // text.value = Object.values(comProps[0].props);
           text.value = state;
 
-          //拿到对应props对象的所有key对应的值的数组，然后v-for遍历渲染
-          propsContent.value = Object.values(comProps[0].props);
+          if (comProps[0]) {
+            //拿到对应props对象的所有key对应的值的数组，然后v-for遍历渲染
+            propsContent.value = Object.values(comProps[0].props);
 
-          // obj.value = comProps[0].props;
-          keyName.value = Object.keys(comProps[0].props);
+            // obj.value = comProps[0].props;
+            keyName.value = Object.keys(comProps[0].props);
+          }
         } else {
           onClick.value = false;
         }
       }
     );
-
+    let apply = () => {
+      //判断是容器还是组件
+      if (useFocus().focusData.value.focus.length > 0) {
+        //点击的是组件
+        alert(1);
+        //下面这个先注释掉了
+        commands.updateBlock(
+          state.editData,
+          useFocus().focusData.value.focus[0]
+        );
+        // console.log(useFocus().focusData.value.focus[0]);
+        // render
+      } else {
+        //点击的是容器
+        alert(2);
+      }
+    };
     const width = computed({
       get() {
         return useData().state.container.width;
@@ -230,22 +247,6 @@ export default defineComponent({
       Object.keys(blockProp).forEach((key) => {
         // blockProp.style[key] =
       });
-    };
-
-    const apply = () => {
-      //判断是容器还是组件
-      if (useFocus().focusData.value.focus.length > 0) {
-        //点击的是组件
-        // alert(1);
-        //下面这个先注释掉了
-        // commands.updateBlock(
-        //   state.editData,
-        //   useFocus().focusData.value.focus[0]
-        // );
-      } else {
-        //点击的是容器
-        alert(2);
-      }
     };
 
     // const apply = () => {
