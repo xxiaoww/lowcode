@@ -1,4 +1,5 @@
 
+import { pl } from "element-plus/es/locale";
 import { lookforId } from "./useLookforId";
 export function useEditorDrag() {
 // 记录拖拽元素
@@ -84,7 +85,6 @@ let dragenterElement:null|HTMLElement = null
   const dragover = function (e: DragEvent) {
     // 阻止默认事件
     e.preventDefault();
-    const target = e.target as HTMLElement;
     
   }; // 设置节流的延迟时间，这里设置为200毫秒
   const dragleave = function (e: DragEvent) {
@@ -103,25 +103,37 @@ let dragenterElement:null|HTMLElement = null
       dragElement.style.removeProperty('left');
       dragElement.style.removeProperty('position');
     }
-    dragElement = null;
-    // 拖动结束清除占位元素
-    placeholder?.remove();
-    dragging = false;
-  
+    
   };  
   const dragEnd= function(e:DragEvent){
     const editorblock = document.querySelectorAll('.editor-block')
     console.log(editorblock)
     const target = e.target as HTMLInputElement
     console.log(target)
-      target.removeEventListener("dragenter",dragenter as (this: Element, ev: Event) => any);
-      target.removeEventListener("dragover",dragover as (this: Element, ev: Event) => any);
-      target.removeEventListener("dragleave",dragleave as (this: Element, ev: Event) => any);
+      // target.removeEventListener("dragenter",dragenter as (this: Element, ev: Event) => any);
+      // target.removeEventListener("dragover",dragover as (this: Element, ev: Event) => any);
+      // target.removeEventListener("dragleave",dragleave as (this: Element, ev: Event) => any);
 
-      target.removeEventListener("drop",drop as (this: Element, ev: Event) => any);
-    
+      // target.removeEventListener("drop",drop as (this: Element, ev: Event) => any);
+      console.log(editorblock)
+      for(let i = 0;i<editorblock.length;i++){
+        editorblock[i].removeEventListener("dragenter",dragenter as (this: Element, ev: Event) => any);
+        editorblock[i].removeEventListener("dragover",dragover as (this: Element, ev: Event) => any);
+        editorblock[i].removeEventListener("dragleave",dragleave as (this: Element, ev: Event) => any);
+        editorblock[i].removeEventListener("drop",drop as (this: Element, ev: Event) => any);
+      }
+      dragElement = null;
+    // 拖动结束清除占位元素
+    const place = document.querySelectorAll('.placeholder');
+    for(let p of place){
+      p.remove()
+    }
+    // placeholder?.remove();
+    dragging = false;
+    console.log(dragging)
   }
   let dragstart = function (e: DragEvent,focusData:any) {
+    
     // e.dataTransfer!.effectAllowed = 'move'
     console.log(e.target);
     const target = e.target as HTMLElement;

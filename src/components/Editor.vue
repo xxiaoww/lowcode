@@ -5,7 +5,10 @@
       <div class="editor-left">
         <div>组件</div>
         <!-- 根据注册的组件进行渲染 -->
-        <div>
+        <div  @dragenter="dragElementEnter($event)"
+            @dragleave="dragElementLeave($event)"
+            @dragover="dragElementOver($event)"
+            @drop="dragElementDrop($event)">
           <div
             draggable="true"
             class="editor-left-item"
@@ -14,6 +17,7 @@
             :key="index"
             @dragstart="dragStart($event, item)"
             @dragend="dragEnd($event, item)"
+           
           >
             <span class="iconfont" :class="item.icon">{{ item.label }}</span>
             <!-- <component :is="item.preview()"></component> -->
@@ -49,8 +53,12 @@
                 block.focus ? '' : onmousedown($event, block, block.id)
               "
               :class="block.focus ? 'editor-block-focus' : ''"
-              @dragstart="dragElement($event, focusData)"
+              @dragstart="dragElement($event)"
               @dragend="dragElementEnd($event)"
+              @dragenter="dragElementEnter($event)"
+              @dragleave="dragElementLeave($event)"
+              @dragover="dragElementOver($event)"
+              @drop="dragElementDrop($event)"
               :drag="false" 
             ></EditorBlock>
           </div>
@@ -91,7 +99,7 @@ import { editorClick } from "./editorClick";
 // import EditorOperatorVue from "./EditorOperator.vue";
 
 // 引入编辑器内的拖拽函数
-import { useEditorDrag } from "./useEditorDrag";
+import { useEditorDrags } from "./useEditorDrags";
 export default defineComponent({
   name: "Editor",
   components: {
@@ -351,7 +359,10 @@ export default defineComponent({
     // 编辑器内的拖拽
     // 开始拖拽的函数
 
-    let { dragstart: dragElement ,dragEnd:dragElementEnd} = useEditorDrag();
+    let { dragstart: dragElement ,dragend:dragElementEnd,dragenter:dragElementEnter,
+    dragleave:dragElementLeave,
+    dragover:dragElementOver,
+    drop:dragElementDrop} = useEditorDrags();
     // const dragElement = function (e: DragEvent, focusData: any) {
     //   console.log(e.target);
     //   const target = e.target as HTMLElement;
@@ -439,6 +450,10 @@ export default defineComponent({
       editorClick,
       dragElement,
       dragElementEnd,
+      dragElementEnter,
+      dragElementLeave,
+      dragElementOver,
+      dragElementDrop,
       focusData,
     };
   },

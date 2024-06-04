@@ -103,6 +103,9 @@
   transition: all 0.5s;
   border: 1px dashed #205dd9;
 }
+.editor-block {
+  position: relative;
+}
 .editor-block-contain {
   position: relative;
 }
