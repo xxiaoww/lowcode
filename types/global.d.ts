@@ -69,6 +69,7 @@ export interface Block {
     type?: string;
     size?: string;
     options?: any[];
+    color?: string;
   };
   model?: {
     defalut?: string;
