@@ -5,10 +5,12 @@
       <div class="editor-left">
         <div>组件</div>
         <!-- 根据注册的组件进行渲染 -->
-        <div  @dragenter="dragElementEnter($event)"
-            @dragleave="dragElementLeave($event)"
-            @dragover="dragElementOver($event)"
-            @drop="dragElementDrop($event)">
+        <div
+          @dragenter="dragElementEnter($event)"
+          @dragleave="dragElementLeave($event)"
+          @dragover="dragElementOver($event)"
+          @drop="dragElementDrop($event)"
+        >
           <div
             draggable="true"
             class="editor-left-item"
@@ -17,7 +19,6 @@
             :key="index"
             @dragstart="dragStart($event, item)"
             @dragend="dragEnd($event, item)"
-           
           >
             <span class="iconfont" :class="item.icon">{{ item.label }}</span>
             <!-- <component :is="item.preview()"></component> -->
@@ -59,7 +60,7 @@
               @dragleave="dragElementLeave($event)"
               @dragover="dragElementOver($event)"
               @drop="dragElementDrop($event)"
-              :drag="false" 
+              :drag="false"
             ></EditorBlock>
           </div>
         </div>
@@ -217,15 +218,15 @@ export default defineComponent({
       const random: string = uuid();
       // console.log(random);
       // 置空
-      let blocks = useData().state.blocks as Block[];
+      // let blocks = useData().state.blocks as Block[];
       console.log(useData().state);
       console.log(useData().state.blocks);
-      console.log(typeof blocks); //object
+      // console.log(typeof blocks); //object
 
       useData().state = {
         ...useData().state,
         blocks: [
-          ...blocks,
+          ...useData().state.blocks,
           {
             zIndex: 1,
             id: random,
@@ -243,6 +244,7 @@ export default defineComponent({
       data = useData().state;
       // console.log(useData().state);
     };
+
     // 拖拽开始事件
     const dragStart = (e: DragEvent, component: componentConfig | null) => {
       // console.log(containerRef.value);
@@ -359,10 +361,14 @@ export default defineComponent({
     // 编辑器内的拖拽
     // 开始拖拽的函数
 
-    let { dragstart: dragElement ,dragend:dragElementEnd,dragenter:dragElementEnter,
-    dragleave:dragElementLeave,
-    dragover:dragElementOver,
-    drop:dragElementDrop} = useEditorDrags();
+    let {
+      dragstart: dragElement,
+      dragend: dragElementEnd,
+      dragenter: dragElementEnter,
+      dragleave: dragElementLeave,
+      dragover: dragElementOver,
+      drop: dragElementDrop,
+    } = useEditorDrags();
     // const dragElement = function (e: DragEvent, focusData: any) {
     //   console.log(e.target);
     //   const target = e.target as HTMLElement;

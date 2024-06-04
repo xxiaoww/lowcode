@@ -131,11 +131,12 @@ export default defineComponent({
             }
           });
 
-          useFocus().focusData.value.focus[0].style = {
-            width: "200px",
-            color: "red",
-            height: "300px",
-          };
+          //1111111用于测试,赋新值
+          // useFocus().focusData.value.focus[0].style = {
+          //   width: "200px",
+          //   color: "red",
+          //   height: "300px",
+          // };
 
           // console.log(comProps[0].render());
 
@@ -184,8 +185,9 @@ export default defineComponent({
           //修改渲染函数render
 
           // text.value = Object.values(comProps[0].props);
-          text.value = state;
-
+          // text.value = state;
+          console.log(state.editData.props);
+          console.log(useFocus().focusData.value.focus[0].props);
           if (comProps[0]) {
             //拿到对应props对象的所有key对应的值的数组，然后v-for遍历渲染
             propsContent.value = Object.values(comProps[0].props);
@@ -203,13 +205,21 @@ export default defineComponent({
       if (useFocus().focusData.value.focus.length > 0) {
         //点击的是组件
         alert(1);
-        //下面这个先注释掉了
-        commands.updateBlock(
-          state.editData,
-          useFocus().focusData.value.focus[0]
-        );
+
+        let oldBlock = useFocus().focusData.value.focus[0];
+        // useFocus().focusData.value.focus[0].props.props = state.editData.props;
+        let newProps = state.editData.props;
+        useFocus().focusData.value.focus[0].props = newProps;
+        let newBlock = useFocus().focusData.value.focus[0];
+        console.log(oldBlock);
+        console.log(useFocus().focusData.value.focus[0].props);
+        commands.updateBlock(newBlock, oldBlock);
+        console.log(useData().state.blocks);
         // console.log(useFocus().focusData.value.focus[0]);
-        // render
+        //
+
+        //修改第二个文本时，第一个也会被修改，
+        //可能是因为绑定的输入框 对象一样？
       } else {
         //点击的是容器
         alert(2);

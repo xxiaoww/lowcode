@@ -3,6 +3,12 @@
     <!-- 组件渲染（使用组件的render函数来渲染） -->
     <!-- :is="componentRender"是将组件的render绑定 -->
     <div class="editor-block-contain" :keys="component?.key">
+      <!-- v-if="
+          component?.body &&
+          component?.body?.length <= 0 &&
+          block?.body &&
+          block?.body.length <= 0
+        " -->
       <component
         v-if="component?.body?.length <= 0 && block?.body <= 0"
         :is="componentRender"
@@ -85,6 +91,8 @@ export default defineComponent({
       console.log(props.block?.key);
       return props.block;
     });
+    console.log(block.value);
+
     console.log(block.value!.body);
     let blockBody = computed(() => {
       return block.value!.body;
@@ -121,13 +129,16 @@ export default defineComponent({
     // });
     let componentRender = computed(() => {
       if (component.value && block.value?.props) {
-        let props = block.value.props || {};
+        // let props = block.value.props || {};
+        // block.value?.props = { color: "red", text: "gg" };
+        // block.value.props = { color: "red", text: "hhh" };
         return component.value.render({
-          props: props,
+          props: block.value.props,
         });
       }
     });
 
+    console.log(block.value);
     //这里需要给render传个props，但是有bug
     // const RenderComponent = component._value.render({
     //   props: block.props,
