@@ -114,9 +114,9 @@ registerConfig.register({
   //     props.text || "渲染文本"
   //   ),
   render: ({ props = {} }) => {
-    if (props.color) {
-      alert(props.color);
-    }
+    // if (props.color) {
+    //   alert(props.color);
+    // }
     const { color = "", size = "", text = "渲染文本" } = props;
     return h(
       "span",

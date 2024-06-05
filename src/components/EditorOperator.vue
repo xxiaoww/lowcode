@@ -55,7 +55,7 @@
 
   <ElFormItem>
     <ElButton type="primary" @click="apply()">应用</ElButton>
-    <ElButton>重置</ElButton>
+    <ElButton @click="reset()">重置</ElButton>
   </ElFormItem>
 </template>
 
@@ -76,6 +76,7 @@ import { useFocus } from "./useFocus"; //为啥要有{}
 import { textProps } from "element-plus";
 import { h } from "vue";
 import useCommand from "../components/useCommand.ts";
+import deepcopy from "deepcopy";
 
 export default defineComponent({
   name: "EditorOperator",
@@ -200,7 +201,7 @@ export default defineComponent({
         }
       }
     );
-    let apply = () => {
+    const apply = () => {
       //判断是容器还是组件
       if (useFocus().focusData.value.focus.length > 0) {
         //点击的是组件
@@ -213,8 +214,9 @@ export default defineComponent({
         let newBlock = useFocus().focusData.value.focus[0];
         console.log(oldBlock);
         console.log(useFocus().focusData.value.focus[0].props);
+
         commands.updateBlock(newBlock, oldBlock);
-        console.log(useData().state.blocks);
+        // console.log(useData().state.blocks);
         // console.log(useFocus().focusData.value.focus[0]);
         //
 
@@ -224,7 +226,26 @@ export default defineComponent({
         //点击的是容器
         alert(2);
       }
+
+      //这一步 解决修改下一个文本时上一个也跟着改变的问题
+      //应用后先重置state的值（
+      // reset();
+      state.editData = {
+        props: {},
+      };
     };
+
+    const reset = () => {
+      if (useFocus().focusData.value.focus.length > 0) {
+        state.editData = deepcopy(useFocus().focusData.value.focus[0]);
+        console.log(state.editData.props);
+      } else {
+        // 说明要绑定的是容器的宽高
+        // state.editData = deepcopy(props.data.container);
+        alert(2);
+      }
+    };
+
     const width = computed({
       get() {
         return useData().state.container.width;
@@ -284,6 +305,7 @@ export default defineComponent({
       keyName,
       state,
       apply,
+      reset,
     };
   },
 });
