@@ -112,6 +112,24 @@ export default function useCommand() {
   });
 
   registry({
+    name: "updataContainer", //更新整个容器
+    pushQueue: true,
+    execute(newValue) {
+      let state = {
+        before: useData().state, //当前的值
+        after: newValue, //新值
+      };
+      return {
+        redo: () => {
+          useData().state = state.after;
+        },
+        undo: () => {
+          useData().state = state.before;
+        },
+      };
+    },
+  });
+  registry({
     name: "updateBlock", //更新组件
     pushQueue: true,
     execute(newBlock, oldBlock) {
