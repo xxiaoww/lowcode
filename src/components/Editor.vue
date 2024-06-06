@@ -472,7 +472,7 @@ export default defineComponent({
   box-sizing: border-box;
   .tit {
     font-size: 18px;
-    margin-bottom: 32px;
+    margin-bottom: 14px;
   }
 }
 </style>

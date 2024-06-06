@@ -51,6 +51,67 @@ const createTableProp = (label: string, table: string) => ({
   table,
 });
 
+//默认选择列表数组
+//字体大小选择的数组
+let fontSizeOpt = [
+  { label: "14px", value: "14px" },
+  { label: "20px", value: "20px" },
+  { label: "24px", value: "24px" },
+];
+//行高选择数组
+let lineHeightOpt = [
+  { label: "1.3", value: "1.3" },
+  { label: "1.5", value: "1.5" },
+  { label: "1.7", value: "1.7" },
+  { label: "1.9", value: "1.9" },
+  { label: "2.1", value: "2.1" },
+  { label: "2.3", value: "2.3" },
+  { label: "2.5", value: "2.5" },
+];
+//字重
+let fontWeightOpt = [
+  { label: "Ultra bold(heavy)(900)", value: "900" },
+  { label: "Extra bold(800)", value: "800" },
+  { label: "Blod(700)", value: "700" },
+  { label: "Semi bold(600)", value: "600" },
+  { label: "Medium(500)", value: "500" },
+  { label: "Regular(400)", value: "400" },
+  { label: "Light(300)", value: "300" },
+  { label: "Extra light(thin)(200)", value: "200" },
+  { label: "Uitra light(100)", value: "100" },
+];
+//圆角
+let borderRadiusOpt = [
+  { label: "无(0px)", value: "0px" },
+  { label: "圆角1(2px)", value: "2px" },
+  { label: "圆角2(4px)", value: "4px" },
+  { label: "圆角3(6px)", value: "6px" },
+  { label: "圆角4(8px)", value: "8px" },
+  { label: "圆角5(10px)", value: "10px" },
+  { label: "圆角6(50%)", value: "50%" },
+];
+//输入类型
+let inputTyepOpt = [
+  { label: "文本", value: "text" },
+  { label: "密码", value: "password" },
+  { label: "邮箱", value: "email" },
+  { label: "URL", value: "url" },
+];
+//按钮类型
+let buttonTypeOpt = [
+  { label: "基础", value: "primary" },
+  { label: "成功", value: "success" },
+  { label: "警告", value: "warning" },
+  { label: "危险", value: "danger" },
+  { label: "文本", value: "text" },
+];
+//按钮尺寸
+let buttonSizeOpt = [
+  { label: "默认", value: "" },
+  { label: "中等", value: "medium" },
+  { label: "小", value: "small" },
+];
+
 // 设置字体大小的配置
 // const createInputProp = (label:string):componentProps=>({
 //     type:'input',
@@ -152,27 +213,9 @@ registerConfig.register({
   props: {
     text: createInputProp("输入文本内容"),
     color: createColorProp("字体颜色"),
-    size: createSelectProp("字体大小", [
-      { label: "14px", value: "14px" },
-      { label: "20px", value: "20px" },
-      { label: "24px", value: "24px" },
-    ]),
-    lineHeight: createSelectProp("文本行高", [
-      { label: "Line-height-1(1.3)", value: "1.3" },
-      { label: "Line-height-2(1.5)", value: "1.5" },
-      { label: "Line-height-3(1.7)", value: "1.7" },
-    ]),
-    fontWeight: createSelectProp("文本字重", [
-      { label: "Ultra bold(heavy)(900)", value: "900" },
-      { label: "Extra bold(800)", value: "800" },
-      { label: "Blod(700)", value: "700" },
-      { label: "Semi bold(600)", value: "600" },
-      { label: "Medium(500)", value: "500" },
-      { label: "Regular(400)", value: "400" },
-      { label: "Light(300)", value: "300" },
-      { label: "Extra light(thin)(200)", value: "200" },
-      { label: "Uitra light(100)", value: "100" },
-    ]),
+    size: createSelectProp("字体大小", fontSizeOpt),
+    lineHeight: createSelectProp("文本行高", lineHeightOpt),
+    fontWeight: createSelectProp("文本字重", fontWeightOpt),
   },
 });
 // 按钮
@@ -198,62 +241,76 @@ registerConfig.register({
   body: [],
   props: {
     text: createInputProp("按钮内容"),
-    type: createSelectProp("按钮类型", [
-      { label: "基础", value: "primary" },
-      { label: "成功", value: "success" },
-      { label: "警告", value: "warning" },
-      { label: "危险", value: "danger" },
-      { label: "文本", value: "text" },
-    ]),
-    size: createSelectProp("按钮尺寸", [
-      { label: "默认", value: "" },
-      { label: "中等", value: "medium" },
-      { label: "小", value: "small" },
-    ]),
-    lineHeight: createSelectProp("按钮行高", [
-      { label: "Line-height-1(1.3)", value: "1.3" },
-      { label: "Line-height-2(1.5)", value: "1.5" },
-      { label: "Line-height-3(1.7)", value: "1.7" },
-    ]),
-    fontWeight: createSelectProp("按钮字重", [
-      { label: "Ultra bold(heavy)(900)", value: "900" },
-      { label: "Extra bold(800)", value: "800" },
-      { label: "Blod(700)", value: "700" },
-      { label: "Semi bold(600)", value: "600" },
-      { label: "Medium(500)", value: "500" },
-      { label: "Regular(400)", value: "400" },
-      { label: "Light(300)", value: "300" },
-      { label: "Extra light(thin)(200)", value: "200" },
-      { label: "Uitra light(100)", value: "100" },
-    ]),
-    borderRadius: createSelectProp("圆角", [
-      { label: "无(0px)", value: "0px" },
-      { label: "圆角1(2px)", value: "2px" },
-      { label: "圆角2(4px)", value: "4px" },
-      { label: "圆角3(6px)", value: "6px" },
-      { label: "圆角4(8px)", value: "8px" },
-      { label: "圆角5(10px)", value: "10px" },
-      { label: "圆角6(50%)", value: "50%" },
-    ]),
+    type: createSelectProp("按钮类型", buttonTypeOpt),
+    size: createSelectProp("按钮尺寸", buttonSizeOpt),
+    lineHeight: createSelectProp("按钮行高", lineHeightOpt),
+    fontWeight: createSelectProp("按钮字重", fontWeightOpt),
+    borderRadius: createSelectProp("圆角", borderRadiusOpt),
   },
 });
 // 输入框
 registerConfig.register({
   label: "输入框",
   preview: () => h(ElInput, { placeholder: "预览输入框" }, ""),
-  render: ({ props = {} }) => h(ElInput, { placeholder: "渲染输入框" }, ""),
+  render: ({ props = {} }) =>
+    h("div", { style: { display: props.display } }, [
+      h(
+        "div",
+        {
+          style: {
+            fontSize: props.titSize,
+            fontWeight: props.titWeight,
+            color: props.titColor,
+            lineHeight: props.titLineHeight,
+            whiteSpace: "nowrap",
+            justifyContent: "space-around",
+          },
+        },
+        props.title || props.title
+      ),
+      h(
+        ElInput,
+        {
+          placeholder: "渲染输入框",
+          type: props.inputTyep,
+          value: props.model || "绑定字段",
+          "max-length": props.maxlength || 1000000,
+          style: {
+            color: props.color,
+            borderRadius: props.borderRadius || "0px",
+          },
+        },
+        "wrwq"
+      ),
+    ]),
+
   key: "input",
   icon: "icon-m-xialakuang",
   body: [],
   props: {
+    display: createSelectProp("布局", [
+      { label: "水平", value: "flex" },
+      { label: "垂直", value: "block" },
+      { label: "内联", value: "inline" },
+    ]),
+    title: createInputProp("输入框标题"),
+    titSize: createSelectProp("标题大小", fontSizeOpt),
+    titWeight: createSelectProp("标题字重", fontWeightOpt),
+    titLineHeight: createSelectProp("标题行高", lineHeightOpt),
+    titColor: createColorProp("标题颜色"),
     // text: createInputProp("输入框文本"),
     color: createColorProp("颜色"),
+    maxLength: createInputProp("最大字数"),
+    borderRadius: createSelectProp("圆角", borderRadiusOpt),
     model: {
+      type: "model",
       label: "输入框内容",
+      // default: "绑定字段",
       // model: {
-      default: "绑定字段",
+      // default: "绑定字段",
       // },
     },
+    inputTyep: createSelectProp("输入类型", inputTyepOpt),
   },
 });
 // 按钮组件
@@ -261,7 +318,7 @@ registerConfig.register({
   label: "按钮组件",
   render: ({ props = {} }) =>
     h("div", { class: "container" }, [
-      h("div", {}, props.title || "按钮点选"),
+      h("div", {}, props.title),
       h(ElButtonGroup, null, [
         h(ElButton, { type: props.type1 || "primary" }, props.val1 || "按钮1"),
         h(ElButton, { type: props.type2 || "primary" }, props.val2 || "按钮2"),
@@ -274,25 +331,9 @@ registerConfig.register({
     title: createInputProp("按钮标题"),
     val1: createInputProp("按钮1内容"),
     val2: createInputProp("按钮2内容"),
-    type1: createSelectProp("按钮1类型", [
-      { label: "基础", value: "primary" },
-      { label: "成功", value: "success" },
-      { label: "警告", value: "warning" },
-      { label: "危险", value: "danger" },
-      { label: "文本", value: "text" },
-    ]),
-    type2: createSelectProp("按钮2类型", [
-      { label: "基础", value: "primary" },
-      { label: "成功", value: "success" },
-      { label: "警告", value: "warning" },
-      { label: "危险", value: "danger" },
-      { label: "文本", value: "text" },
-    ]),
-    size: createSelectProp("按钮尺寸", [
-      { label: "默认", value: "" },
-      { label: "中等", value: "medium" },
-      { label: "小", value: "small" },
-    ]),
+    type1: createSelectProp("按钮1类型", buttonTypeOpt),
+    type2: createSelectProp("按钮2类型", buttonTypeOpt),
+    size: createSelectProp("按钮尺寸", buttonSizeOpt),
   },
 });
 
@@ -312,7 +353,7 @@ registerConfig.register({
         },
       },
       [
-        h("div", {}, props.title || "单选框"),
+        h("div", {}, props.title),
         h(
           ElRadioGroup,
           {

@@ -1,58 +1,60 @@
 <template>
-  <template v-if="!onClick">
-    <div class="containerSetting">
-      <ElFormItem label="容器宽度"
-        ><ElInput type="text" v-model="width"></ElInput
-      ></ElFormItem>
+  <div class="editor-content">
+    <template v-if="!onClick">
+      <div class="containerSetting">
+        <ElFormItem label="容器宽度"
+          ><ElInput type="text" v-model="width"></ElInput
+        ></ElFormItem>
 
-      <ElFormItem label="容器高度"
-        ><ElInput type="text" v-model="height"></ElInput
-      ></ElFormItem>
-    </div>
-  </template>
-  <template v-else>
-    <div class="componentSetting">
-      <div class="text">{{ text }}</div>
-      <!-- 遍历props对象,渲染每一个值，判断对应的类型进行渲染 -->
+        <ElFormItem label="容器高度"
+          ><ElInput type="text" v-model="height"></ElInput
+        ></ElFormItem>
+      </div>
+    </template>
+    <template v-else>
+      <div class="componentSetting">
+        <div class="text">{{ text }}</div>
+        <!-- 遍历props对象,渲染每一个值，判断对应的类型进行渲染 -->
 
-      <!-- props的类型 -->
-      <template v-for="(p, index) in propsContent" :key="index">
-        <ElFormItem :label="p.label">
-          <!-- 输入框的 (model) -->
-          <ElInput
-            v-if="p.model"
-            v-model="state.editData.props.model.label"
-          ></ElInput>
-          <!-- <ElInput
+        <!-- props的类型 -->
+        <template v-for="(p, index) in propsContent" :key="index">
+          <ElFormItem :label="p.label">
+            <!-- 输入框的 (model) -->
+            <ElInput
+              v-if="p.type == 'model'"
+              v-model="state.editData.props[keyName[index]]"
+            ></ElInput>
+            <!-- <ElInput
             v-if="keyName[index] == 'model'"
             v-model="state.editData.model.default"
           ></ElInput> -->
-          <!-- 只是输入内容 -->
-          <ElInput
-            v-if="p.type === 'input'"
-            v-model="state.editData.props[keyName[index]]"
-          ></ElInput>
+            <!-- 只是输入内容 -->
+            <ElInput
+              v-if="p.type === 'input'"
+              v-model="state.editData.props[keyName[index]]"
+            ></ElInput>
 
-          <ElColorPicker
-            v-if="p.type === 'color'"
-            v-model="state.editData.props[keyName[index]]"
-          ></ElColorPicker>
-          <ElSelect
-            v-if="p.type === 'select'"
-            v-model="state.editData.props[keyName[index]]"
-          >
-            <ElOption
-              v-for="(opt, index) in p.option"
-              :key="index"
-              :label="opt.label"
-              :value="opt.value"
-              >{{ opt.label }}
-            </ElOption>
-          </ElSelect>
-        </ElFormItem>
-      </template>
-    </div>
-  </template>
+            <ElColorPicker
+              v-if="p.type === 'color'"
+              v-model="state.editData.props[keyName[index]]"
+            ></ElColorPicker>
+            <ElSelect
+              v-if="p.type === 'select'"
+              v-model="state.editData.props[keyName[index]]"
+            >
+              <ElOption
+                v-for="(opt, index) in p.option"
+                :key="index"
+                :label="opt.label"
+                :value="opt.value"
+                >{{ opt.label }}
+              </ElOption>
+            </ElSelect>
+          </ElFormItem>
+        </template>
+      </div>
+    </template>
+  </div>
 
   <ElFormItem>
     <ElButton type="primary" @click="apply()">应用</ElButton>
@@ -136,8 +138,8 @@ export default defineComponent({
 
           state.editData = deepcopy(useFocus().focusData.value.focus[0]);
 
-          // text.value = useFocus().focusData.value.focus[0].props;
-          text.value = useFocus().focusData.value.focus[0];
+          text.value = useFocus().focusData.value.focus[0].props;
+          // text.value = useFocus().focusData.value.focus[0];
           // text.value = comProps[0].render().children; //comProps[0].render().children是渲染的默认文本
           // text.value = Object.values(comProps[0].props);
           // text.value = state;
@@ -241,4 +243,15 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style scoped lang="less">
+.editor-content {
+  width: 100%;
+  height: 86%;
+  overflow: scroll;
+  margin-bottom: 12px;
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+</style>
