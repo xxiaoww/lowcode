@@ -12,9 +12,6 @@
   </template>
   <template v-else>
     <div class="componentSetting">
-      <!-- 用于测试，可删 -->
-      <!-- <div class="a" v-for="(p, index) in keyName" :key="index">{{ p }}</div> -->
-
       <div class="text">{{ text }}</div>
       <!-- 遍历props对象,渲染每一个值，判断对应的类型进行渲染 -->
 
@@ -24,8 +21,12 @@
           <!-- 输入框的 (model) -->
           <ElInput
             v-if="p.model"
-            v-model="state.editData.props[keyName[index]]"
+            v-model="state.editData.props.model.label"
           ></ElInput>
+          <!-- <ElInput
+            v-if="keyName[index] == 'model'"
+            v-model="state.editData.model.default"
+          ></ElInput> -->
           <!-- 只是输入内容 -->
           <ElInput
             v-if="p.type === 'input'"
@@ -113,6 +114,7 @@ export default defineComponent({
         props: {},
       },
     });
+
     // state.editData.props;
     watch(
       () => {
@@ -132,59 +134,11 @@ export default defineComponent({
             }
           });
 
-          //1111111用于测试,赋新值
-          // useFocus().focusData.value.focus[0].style = {
-          //   width: "200px",
-          //   color: "red",
-          //   height: "300px",
-          // };
+          state.editData = deepcopy(useFocus().focusData.value.focus[0]);
 
-          // console.log(comProps[0].render());
-
-          // 获取该block的props（是渲染的，不是配置的
-          // let bloProp = useFocus().focusData.value.focus[0].props;
-
-          // （（（（（（（（（（（（（（（（
-          // 改变editor.vue里面的props?怎么赋值给已渲染的组件
-          // useFocus().focusData.value.focus[0].props = {
-          //   text: "2222",
-          // };
-
-          text.value = useFocus().focusData.value.focus[0].props;
+          // text.value = useFocus().focusData.value.focus[0].props;
+          text.value = useFocus().focusData.value.focus[0];
           // text.value = comProps[0].render().children; //comProps[0].render().children是渲染的默认文本
-
-          //文本部分默认是渲染的默认文本
-          // editText.value = comProps[0].render().children;
-
-          // if(comKey == 'input'){
-
-          // }
-
-          // let resetText = (key) => {
-          //   if (key === "button") {
-          //     comProps[0].render = () => h(ElButton, {}, editText.value);
-          //   } else if (key === "text") {
-          //     comProps[0].render = () => h("span", {}, editText.value);
-          //   } else if (key === "radio") {
-          //     comProps[0].render = () =>
-          //       h("div", { class: "mb-2 flex items-center text-sm" }, [
-          //         h(
-          //           ElRadioGroup,
-          //           {
-          //             class: "ml-4",
-          //           },
-          //           [
-          //             h(ElRadio, { value: "1", size: "large" }, "选择1"),
-          //             h(ElRadio, { value: "2", size: "large" }, "选择2"),
-          //           ]
-          //         ),
-          //       ]);
-          //   }
-          // };
-          //判断key类型,从而修改对应的文本部分
-          // resetText(comKey);
-          //修改渲染函数render
-
           // text.value = Object.values(comProps[0].props);
           // text.value = state;
           console.log(state.editData.props);
@@ -263,30 +217,6 @@ export default defineComponent({
       },
     });
 
-    // watch(
-    //   () => {
-    //     return editText.value;
-    //   },
-    //   (newValue) => {
-    //     // useFocus().focusData.value.focus[0].value = newValue;
-    //     console.log(useFocus().focusData.value.focus[0].render);
-    //   }
-    // );
-
-    let confirmUse = (blockProp) => {
-      //遍历当前组件的props对象，拿到每个key,设置对应的值
-      Object.keys(blockProp).forEach((key) => {
-        // blockProp.style[key] =
-      });
-    };
-
-    // const apply = () => {
-    //         if (!props.block) {//更改组件容器的大小
-    //             props.updataContainer({...props.data,container:state.editData})
-    //         } else {//更改组件容器配置
-    //             props.updateBlock(state.editData,props.block)
-    //         }
-    //     }
     // // 如果有选中，content就渲染选中组件对应的配置，否则默认渲染最外层容器的
     return {
       width,
