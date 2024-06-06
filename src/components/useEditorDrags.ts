@@ -47,6 +47,7 @@ export function useEditorDrags(){
             // father.parentNode!.insertBefore(dragElement!, father);
                 // 直接拿到dragElement的数据，然后插入到对应位置，影响state来改变页面布局
                 moveBlock(sourceId,id,'before')
+          console.log(useData().state.blocks)
             
             }else if(distance>=(height - 5)){
               console.log(2222)
