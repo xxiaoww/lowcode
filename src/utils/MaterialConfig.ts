@@ -121,7 +121,12 @@ registerConfig.register({
     return h(
       "span",
       {
-        style: { color, fontSize: size },
+        style: {
+          color,
+          fontSize: size,
+          "line-height": props.lineHeight,
+          "font-weight": props.fontWeight,
+        },
         class: "text",
       },
       text
@@ -152,13 +157,42 @@ registerConfig.register({
       { label: "20px", value: "20px" },
       { label: "24px", value: "24px" },
     ]),
+    lineHeight: createSelectProp("文本行高", [
+      { label: "Line-height-1(1.3)", value: "1.3" },
+      { label: "Line-height-2(1.5)", value: "1.5" },
+      { label: "Line-height-3(1.7)", value: "1.7" },
+    ]),
+    fontWeight: createSelectProp("文本字重", [
+      { label: "Ultra bold(heavy)(900)", value: "900" },
+      { label: "Extra bold(800)", value: "800" },
+      { label: "Blod(700)", value: "700" },
+      { label: "Semi bold(600)", value: "600" },
+      { label: "Medium(500)", value: "500" },
+      { label: "Regular(400)", value: "400" },
+      { label: "Light(300)", value: "300" },
+      { label: "Extra light(thin)(200)", value: "200" },
+      { label: "Uitra light(100)", value: "100" },
+    ]),
   },
 });
 // 按钮
 registerConfig.register({
   label: "按钮",
   preview: () => h(ElButton, {}, "预览按钮"),
-  render: ({ props = {} }) => h(ElButton, {}, "渲染按钮"),
+  render: ({ props = {} }) =>
+    h(
+      ElButton,
+      {
+        type: props.type,
+        size: props.size,
+        style: {
+          "line-height": props.lineHeight,
+          "font-weight": props.fontWeight,
+          "border-radius": props.borderRadius,
+        },
+      },
+      props.text || "渲染按钮"
+    ),
   key: "button",
   icon: "icon-anniu",
   body: [],
@@ -176,6 +210,31 @@ registerConfig.register({
       { label: "中等", value: "medium" },
       { label: "小", value: "small" },
     ]),
+    lineHeight: createSelectProp("按钮行高", [
+      { label: "Line-height-1(1.3)", value: "1.3" },
+      { label: "Line-height-2(1.5)", value: "1.5" },
+      { label: "Line-height-3(1.7)", value: "1.7" },
+    ]),
+    fontWeight: createSelectProp("按钮字重", [
+      { label: "Ultra bold(heavy)(900)", value: "900" },
+      { label: "Extra bold(800)", value: "800" },
+      { label: "Blod(700)", value: "700" },
+      { label: "Semi bold(600)", value: "600" },
+      { label: "Medium(500)", value: "500" },
+      { label: "Regular(400)", value: "400" },
+      { label: "Light(300)", value: "300" },
+      { label: "Extra light(thin)(200)", value: "200" },
+      { label: "Uitra light(100)", value: "100" },
+    ]),
+    borderRadius: createSelectProp("圆角", [
+      { label: "无(0px)", value: "0px" },
+      { label: "圆角1(2px)", value: "2px" },
+      { label: "圆角2(4px)", value: "4px" },
+      { label: "圆角3(6px)", value: "6px" },
+      { label: "圆角4(8px)", value: "8px" },
+      { label: "圆角5(10px)", value: "10px" },
+      { label: "圆角6(50%)", value: "50%" },
+    ]),
   },
 });
 // 输入框
@@ -191,9 +250,9 @@ registerConfig.register({
     color: createColorProp("颜色"),
     model: {
       label: "输入框内容",
-      model: {
-        default: "绑定字段",
-      },
+      // model: {
+      default: "绑定字段",
+      // },
     },
   },
 });
@@ -202,17 +261,27 @@ registerConfig.register({
   label: "按钮组件",
   render: ({ props = {} }) =>
     h("div", { class: "container" }, [
+      h("div", {}, props.title || "按钮点选"),
       h(ElButtonGroup, null, [
-        h(ElButton, { type: "primary" }, "按钮"),
-        h(ElButton, { type: "primary" }, "按钮"),
+        h(ElButton, { type: props.type1 || "primary" }, props.val1 || "按钮1"),
+        h(ElButton, { type: props.type2 || "primary" }, props.val2 || "按钮2"),
       ]),
     ]),
   key: "buttonGroup",
   icon: "icon-button-group",
   body: [],
   props: {
-    text: createInputProp("按钮内容"),
-    type: createSelectProp("按钮类型", [
+    title: createInputProp("按钮标题"),
+    val1: createInputProp("按钮1内容"),
+    val2: createInputProp("按钮2内容"),
+    type1: createSelectProp("按钮1类型", [
+      { label: "基础", value: "primary" },
+      { label: "成功", value: "success" },
+      { label: "警告", value: "warning" },
+      { label: "危险", value: "danger" },
+      { label: "文本", value: "text" },
+    ]),
+    type2: createSelectProp("按钮2类型", [
       { label: "基础", value: "primary" },
       { label: "成功", value: "success" },
       { label: "警告", value: "warning" },
@@ -231,23 +300,64 @@ registerConfig.register({
 registerConfig.register({
   label: "单选框",
   render: ({ props = {} }) =>
-    h("div", { class: "mb-2 flex items-center text-sm" }, [
-      h(
-        ElRadioGroup,
-        {
-          class: "ml-4",
+    h(
+      "div",
+      {
+        class: "mb-2 flex items-center text-sm",
+        size: props.size,
+        //disabled不确定是否写在外面，需要等导出页面后验证~
+        disabled: props.disabled,
+        style: {
+          display: props.mode,
         },
-        [
-          h(ElRadio, { value: "1", size: "large" }, "选择1"),
-          h(ElRadio, { value: "2", size: "large" }, "选择2"),
-        ]
-      ),
-    ]),
+      },
+      [
+        h("div", {}, props.title || "单选框"),
+        h(
+          ElRadioGroup,
+          {
+            class: "ml-4",
+          },
+          [
+            h(
+              ElRadio,
+              { value: "1", size: "large", style: { color: props.color1 } },
+              props.text1 || "选项A"
+            ),
+            h(
+              ElRadio,
+              { value: "2", size: "large", style: { color: props.color2 } },
+              props.text2 || "选项B"
+            ),
+          ]
+        ),
+      ]
+    ),
   key: "radio",
   icon: "icon-danxuankuang",
   body: [],
   props: {
-    text: createInputProp("单选框文本"),
-    color: createColorProp("颜色"),
+    title: createInputProp("单选框标题"),
+    text1: createInputProp("单选框1文本"),
+    text2: createInputProp("单选框2文本"),
+    color1: createColorProp("文本1颜色"),
+    color2: createColorProp("文本2颜色"),
+
+    //BUg:
+    mode: createSelectProp("布局", [
+      { label: "内联", value: "inline" },
+      { label: "水平", value: "horizontal" },
+      { label: "垂直", value: "normal" },
+      { label: "继承", value: "" },
+    ]),
+    size: createSelectProp("单选框尺寸", [
+      { label: "默认", value: "" },
+      { label: "中等", value: "medium" },
+      { label: "小", value: "small" },
+    ]),
+    disabled: createSelectProp("是否禁用", [
+      { label: "是", value: "true" },
+      { label: "否", value: "false" },
+    ]),
   },
 });
