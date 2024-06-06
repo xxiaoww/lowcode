@@ -118,7 +118,6 @@ export function moveBlock(sourceId: string, targetId: string, position: 'before'
   const parentBlock = findParentBlock(blocks.value, targetId);
   if (parentBlock) {
       const targetIndex = parentBlock.body!.findIndex(block => block.id === targetId);
-
       if (position === 'before') {
           parentBlock.body!.splice(targetIndex, 0, cachedSourceBlock);
       } else if (position === 'after') {
