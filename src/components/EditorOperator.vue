@@ -3,11 +3,11 @@
     <template v-if="!onClick">
       <div class="containerSetting">
         <ElFormItem label="容器宽度"
-          ><ElInput type="text" v-model="width"></ElInput
+          ><ElInput type="text" v-model="state.editData.width"></ElInput
         ></ElFormItem>
 
         <ElFormItem label="容器高度"
-          ><ElInput type="text" v-model="height"></ElInput
+          ><ElInput type="text" v-model="state.editData.height"></ElInput
         ></ElFormItem>
       </div>
     </template>
@@ -54,6 +54,10 @@
         </template>
       </div>
     </template>
+    <!-- 自定义样式 -->
+    <div class="diy-style">
+      <ElInput type="text-eare" v-model="diyContent"></ElInput>
+    </div>
   </div>
 
   <ElFormItem>
@@ -116,8 +120,13 @@ export default defineComponent({
         props: {},
       },
     });
+    //最开始默认是显示容器的
+    // state.editData = deepcopy(useData().state.container);
 
     // state.editData.props;
+
+    let diyContent = ref(""); //自定义部分  （字符串）
+
     watch(
       () => {
         return useFocus().focusData.value.focus.length;
@@ -136,9 +145,11 @@ export default defineComponent({
             }
           });
 
+          //state对象先获取原有的数据
           state.editData = deepcopy(useFocus().focusData.value.focus[0]);
 
-          text.value = useFocus().focusData.value.focus[0].props;
+          // text.value = useFocus().focusData.value.focus[0].props;
+          text.value = useFocus().focusData.value.focus[0].style;
           // text.value = useFocus().focusData.value.focus[0];
           // text.value = comProps[0].render().children; //comProps[0].render().children是渲染的默认文本
           // text.value = Object.values(comProps[0].props);
@@ -154,6 +165,7 @@ export default defineComponent({
           }
         } else {
           onClick.value = false;
+          state.editData = deepcopy(useData().state.container);
         }
       }
     );
@@ -162,6 +174,27 @@ export default defineComponent({
       if (useFocus().focusData.value.focus.length > 0) {
         //点击的是组件
         alert(1);
+
+        //自定义代码
+        let beforeStyle = useFocus().focusData.value.focus[0].style;
+        // let newStyle = JSON.parse(diyContent.value); //将字符串转为对象
+        let newStyle = {};
+        let arr = diyContent.value.split(";"); //转为数组
+        arr.map((item) => {
+          if (item != "") {
+            // 分离键和值
+            const [key, value] = item.split(":");
+            if (key && value) {
+              // 去掉值的引号并去掉多余的空格
+              newStyle[key.trim()] = value.trim().replace(/(^"|"$)/g, "");
+            }
+          }
+        });
+        //合并到原来的对象当中
+        useFocus().focusData.value.focus[0].style = {
+          ...beforeStyle,
+          ...newStyle,
+        };
 
         let oldBlock = useFocus().focusData.value.focus[0];
         // useFocus().focusData.value.focus[0].props.props = state.editData.props;
@@ -181,6 +214,10 @@ export default defineComponent({
       } else {
         //点击的是容器
         alert(2);
+        commands.updataContainer({
+          ...useData().state,
+          container: state.editData,
+        });
       }
 
       //这一步 解决修改下一个文本时上一个也跟着改变的问题
@@ -238,6 +275,7 @@ export default defineComponent({
       state,
       apply,
       reset,
+      diyContent,
     };
   },
 });
