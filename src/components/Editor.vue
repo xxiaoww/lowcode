@@ -86,7 +86,7 @@ import "./editor.less";
 import { useFocus } from "./useFocus";
 // 引入
 import { v4 as uuid } from "uuid";
-import { lookforId } from "./useLookforId";
+// import { lookforId } from "./useLookforId";
 //引入菜单组件
 import Menu from "./Menu.vue";
 // console.log(AppData)

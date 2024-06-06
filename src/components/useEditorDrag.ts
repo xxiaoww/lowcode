@@ -1,6 +1,6 @@
 
 import { pl } from "element-plus/es/locale";
-import { lookforId } from "./useLookforId";
+import { moveBlock } from "./useLookforId";
 export function useEditorDrag() {
 // 记录拖拽元素
 let dragElement:null|HTMLElement = null
@@ -85,6 +85,7 @@ let dragenterElement:null|HTMLElement = null
   const dragover = function (e: DragEvent) {
     // 阻止默认事件
     e.preventDefault();
+    const target = e.target as HTMLElement;
     
   }; // 设置节流的延迟时间，这里设置为200毫秒
   const dragleave = function (e: DragEvent) {
@@ -130,7 +131,7 @@ let dragenterElement:null|HTMLElement = null
     }
     // placeholder?.remove();
     dragging = false;
-    console.log(dragging)
+  
   }
   let dragstart = function (e: DragEvent,focusData:any) {
     
@@ -148,7 +149,7 @@ let dragenterElement:null|HTMLElement = null
     const rect = dragElement.getBoundingClientRect();
     // x = e.clientX - dragElement.offsetLeft;
     // y = e.clientY - dragElement.offsetTop;
-    lookforId(id!);
+    // lookforId(id!);
     // 获取选中的组件
     const focus = focusData.focus;
     // 过进行拖拽的元素添加的事件是dragstart，drag，dragend
