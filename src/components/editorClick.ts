@@ -25,7 +25,6 @@ export function editorClick(
 
       useData().state.blocks.forEach((block) => {
         console.log(block.id);
-
         lookforContainer(state, block, focus, component);
       });
       console.log(useData().state);
@@ -161,7 +160,10 @@ const lookforContainer = function (
       }
       console.log(blockBody);
     }
-    block.key = component.key;
+    block.key = 'latercontainer'
+    // latercontainer的body添加点击的组件
+    createid(block, component, blockBody);
+    // block.key = component.key;
     console.log(block);
     // 使用 Vue.set
     // 更新 state.blocks
@@ -239,6 +241,61 @@ const addbox = function (block: any, component: any) {
   });
 };
 // 寻找id一致的盒子
+// const lookforId = function (
+//   state: any,
+//   block: any,
+//   focus: any,
+//   component: any,
+//   fatherBlock: any,
+//   sonBlock: any
+// ) {
+//   console.log(fatherBlock.body);
+//   // 回溯
+//   const dfs = function (block: any) {
+//     if (block.id === focus[0].id) {
+//       fatherBlock = sonBlock;
+//       const blockBody = componentbody(component);
+//       // 生成id
+//       let id = uuid();
+//       fatherBlock.body = [
+//         ...fatherBlock.body,
+//         {
+//           zIndex: 1,
+//           id: id,
+//           key: component.key,
+//           alignCenter: true,
+//           focus: false,
+//           body: blockBody,
+//           props: {},
+//         },
+//       ];
+
+//       // 更新 state.blocks
+//       state.value = { ...state.value };
+//       console.log(state.value);
+//       console.log(block.body);
+//       return;
+//     }
+
+//     if (block.body && block.body.length > 0) {
+//       for (let i = 0; i < block.body.length; i++) {
+//         sonBlock = block.body[i];
+//         dfs(sonBlock);
+//       }
+//     }
+//   };
+
+//   if (Array.isArray(block)) {
+//     for (let i = 0; i < block.length; i++) {
+//       sonBlock = block[i];
+//       console.log(sonBlock);
+//       dfs(sonBlock);
+//     }
+//   } else {
+//     dfs(block);
+//   }
+// };
+// 寻找id一致的盒子
 const lookforId = function (
   state: any,
   block: any,
@@ -248,25 +305,58 @@ const lookforId = function (
   sonBlock: any
 ) {
   console.log(fatherBlock.body);
+
   // 回溯
-  const dfs = function (block: any) {
+  const dfs = function (block: any, parentBlock: any) {
     if (block.id === focus[0].id) {
-      fatherBlock = sonBlock;
+      fatherBlock = parentBlock;
       const blockBody = componentbody(component);
+
       // 生成id
       let id = uuid();
-      fatherBlock.body = [
-        ...fatherBlock.body,
-        {
+
+      if (fatherBlock.key !== 'latercontainer' && fatherBlock.key !== 'flex' && fatherBlock.key !== 'container') {
+        // 如果 fatherBlock 不是 latercontainer、flex 或 container，则在外层加一个块
+        let newBlock = {
           zIndex: 1,
-          id: id,
-          key: component.key,
+          id: uuid(),
+          key: 'container', // 可以根据需要调整 key 的值
           alignCenter: true,
           focus: false,
-          body: blockBody,
+          body: [
+            {
+              zIndex: 1,
+              id: id,
+              key: component.key,
+              alignCenter: true,
+              focus: false,
+              body: blockBody,
+              props: {},
+            },
+          ],
           props: {},
-        },
-      ];
+        };
+
+        if (Array.isArray(fatherBlock.body)) {
+          fatherBlock.body.push(newBlock);
+        } else {
+          fatherBlock.body = [newBlock];
+        }
+      } else {
+        // 如果 fatherBlock 是 latercontainer、flex 或 container，则直接添加新的块
+        fatherBlock.body = [
+          ...fatherBlock.body,
+          {
+            zIndex: 1,
+            id: id,
+            key: component.key,
+            alignCenter: true,
+            focus: false,
+            body: blockBody,
+            props: {},
+          },
+        ];
+      }
 
       // 更新 state.blocks
       state.value = { ...state.value };
@@ -278,7 +368,7 @@ const lookforId = function (
     if (block.body && block.body.length > 0) {
       for (let i = 0; i < block.body.length; i++) {
         sonBlock = block.body[i];
-        dfs(sonBlock);
+        dfs(sonBlock, block);
       }
     }
   };
@@ -286,14 +376,14 @@ const lookforId = function (
   if (Array.isArray(block)) {
     for (let i = 0; i < block.length; i++) {
       sonBlock = block[i];
-
       console.log(sonBlock);
-      dfs(sonBlock);
+      dfs(sonBlock, block);
     }
   } else {
-    dfs(block);
+    dfs(block, null);
   }
 };
+
 
 // 调用DFS搜索函数
 // const lookforId = function (state: any, block: any, focus: any, component: any,fatherBlock: any,sonBlock:any) {
