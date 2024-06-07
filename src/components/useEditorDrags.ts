@@ -1,4 +1,6 @@
-import { lookforId } from "./useLookforId";
+import { moveBlock } from "./useLookforId";
+import useData from "../stores/data"; // useData().state 就是 data.json 的内容
+
 export function useEditorDrags(){
     // 记录拖拽的元素
     let dragElement:null|HTMLElement = null
@@ -10,8 +12,7 @@ export function useEditorDrags(){
         width = dragElement.style.width
         height = dragElement.style.height
         console.log(width, height)
-        dragElement.style.width = '0px'
-        dragElement.style.height = '0px'
+ 
         // 设置拖拽效果
     e.dataTransfer!.effectAllowed = 'move'
     }
@@ -33,17 +34,27 @@ export function useEditorDrags(){
             father.style.border = '1px dashed #ccc';
         }
         let key = father.getAttribute('keys') as string
+        // 父元素的id
+        let id = father.getAttribute('data-id') as string
+        // soucrId拖拽元素的id
+        let sourceId = dragElement?.getAttribute('data-id') as string
         let top = father.offsetTop
         let height = father.offsetHeight
         let distance = e.clientY - top
         if(key !=='container' && key !=='flex'&& key!=='latercontainer') {
             if(distance<= 5) {
               console.log(1111)
-            father.parentNode!.insertBefore(dragElement!, father);
+            // father.parentNode!.insertBefore(dragElement!, father);
+                // 直接拿到dragElement的数据，然后插入到对应位置，影响state来改变页面布局
+                moveBlock(sourceId,id,'before')
+          console.log(useData().state.blocks)
             
             }else if(distance>=(height - 5)){
               console.log(2222)
-          father.parentNode!.insertBefore(dragElement!, father.nextSibling);
+        //   father.parentNode!.insertBefore(dragElement!, father.nextSibling);
+          moveBlock(sourceId,id,'after')
+          console.log(useData().state.blocks)
+
             }
           }
         
