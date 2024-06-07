@@ -1,179 +1,179 @@
 .all {
-    height: 100%;
+  height: 100%;
 }
 
 .header {
-    height: 50px;
-    line-height: 50px;
-    margin-left: 50px;
-    font-size: 18px;
+  height: 50px;
+  line-height: 50px;
+  margin-left: 50px;
+  font-size: 18px;
 }
 
 .editor {
-    width: 100%;
-    height: calc(100% - 110px);
+  width: 100%;
+  height: calc(100% - 110px);
 
-    margin-top: 50px;
+  margin-top: 50px;
 
-    //    position: relative;
-    &-left,
-    &-right {
-        position: absolute;
-        width: 270px;
-        // height: 100%;
-        top: 50px;
-        bottom: 0;
-        background-color: #ffffff;
-        border: 1px solid #ccc;
+  //    position: relative;
+  &-left,
+  &-right {
+    position: absolute;
+    width: 270px;
+    // height: 100%;
+    top: 50px;
+    bottom: 0;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+  }
+
+  &-left {
+    left: 20px;
+
+    > div:last-of-type {
+      display: flex;
+      flex-wrap: wrap;
     }
 
-    &-left {
-        left: 20px;
+    &-item {
+      width: 100px;
+      padding: 10px;
+      margin: 10px 10px 10px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      user-select: none;
+      background-color: #fff;
+      border: 1px solid #e8e9eb;
+      border-radius: 5px;
+      // min-height: 100px;
+      height: 40px;
+      position: relative;
+      font-size: 14px;
 
-        >div:last-of-type {
-            display: flex;
-            flex-wrap: wrap;
-        }
+      > span {
+        font-size: 14px;
+        color: #151b26;
+      }
 
-        &-item {
-            width: 100px;
-            padding: 10px;
-            margin: 10px 10px 10px 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            user-select: none;
-            background-color: #fff;
-            border: 1px solid #e8e9eb;
-            border-radius: 5px;
-            // min-height: 100px;
-            height: 40px;
-            position: relative;
-            font-size: 14px;
+      > span:hover {
+        cursor: pointer;
+      }
 
-            >span {
-                font-size: 14px;
-                color: #151b26;
-            }
+      // >span:first-of-type {
+      //     position: absolute;
+      //     top: 0;
+      //     left: 0;
+      //     background-color: #fff;
+      //     color:  #151b26;
+      //     padding: 5px;
+      //     font-size: 14px;
+      // }
 
-            >span:hover {
-                cursor: pointer;
-            }
+      // &::after {
+      //     content: "";
+      //     position: absolute;
+      //     top: 0;
+      //     right: 0;
+      //     left: 0;
+      //     bottom: 0;
+      // }
+    }
+  }
 
-            // >span:first-of-type {
-            //     position: absolute;
-            //     top: 0;
-            //     left: 0;
-            //     background-color: #fff;
-            //     color:  #151b26;
-            //     padding: 5px;
-            //     font-size: 14px;
-            // }
+  &-right {
+    right: 20px;
+  }
 
-            // &::after {
-            //     content: "";
-            //     position: absolute;
-            //     top: 0;
-            //     right: 0;
-            //     left: 0;
-            //     bottom: 0;
-            // }
-        }
+  &-top {
+    position: absolute;
+    right: 300px;
+    left: 300px;
+    top: 50px;
+    height: 80px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+  }
+
+  &-container {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 80px 100px 0;
+
+    &-block {
+      overflow: auto;
+      height: 100%;
+      background-color: #f0f0f2;
+      // position: relative;
     }
 
-    &-right {
-        right: 20px;
+    &-content {
+      position: relative;
+      margin: 20px auto;
+      padding: 20px;
+      width: 800px;
+      height: 700px;
+      background-color: #fff;
+      border: 1px solid #ccc;
     }
-
-    &-top {
-        position: absolute;
-        right: 300px;
-        left: 300px;
-        top: 50px;
-        height: 80px;
-        background-color: #ffffff;
-        border: 1px solid #ccc;
-    }
-
-    &-container {
-        height: 100%;
-        box-sizing: border-box;
-        padding: 80px 100px 0;
-
-        &-block {
-            overflow: auto;
-            height: 100%;
-            background-color: #f0f0f2;
-            // position: relative;
-
-        }
-
-        &-content {
-            position: relative;
-            margin: 20px auto;
-            padding: 20px;
-            width: 800px;
-            height: 700px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-        }
-    }
+  }
 }
 
 .editor-block-contain {
-    padding: 10px;
-    background-color: #fff;
-    box-sizing: border-box;
-    transition: all 0.5s;
-    // border: 2px solid #205dd9;
+  //   padding: 10px;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: all 0.5s;
+  // border: 2px solid #205dd9;
 
-    .contain {
-        width: 100%;
-        height: 80px;
-        box-sizing: border-box;
-        background-color: #e9ecf3;
-        border: 1px dashed #ccc;
-        text-align: center;
-        line-height: 80px;
-        color: #bcbec3;
-    }
+  .contain {
+    width: 100%;
+    height: 80px;
+    box-sizing: border-box;
+    background-color: #e9ecf3;
+    border: 1px dashed #ccc;
+    text-align: center;
+    line-height: 80px;
+    color: #bcbec3;
+  }
 }
 
 .editor-block-contain:hover {
-    transition: all 0.5s;
+  transition: all 0.5s;
 
-    border: 1px dashed #205dd9;
+  border: 1px dashed #205dd9;
 }
 
-.editor-block{
-    position: relative;
-    // transition: all 0.3s ease;//添加过渡效果
+.editor-block {
+  position: relative;
+  margin-bottom: 10px;
+  // transition: all 0.3s ease;//添加过渡效果
 }
 .editor-block-contain {
-    position: relative;
-    // &::after{
-    //     position: absolute;
-    //     content: "";
-    //     top: 0;
-    //     right: 0;
-    //     left: 0;
-    //     bottom: 0;
-    //     // background-color: #ccc;
-    //     // opacity: 0.2;
-    // }
+  position: relative;
+  // &::after{
+  //     position: absolute;
+  //     content: "";
+  //     top: 0;
+  //     right: 0;
+  //     left: 0;
+  //     bottom: 0;
+  //     // background-color: #ccc;
+  //     // opacity: 0.2;
+  // }
 }
 
 .editor-block-focus {
-    box-sizing: border-box;
-    border: 2px solid #205dd9;
+  box-sizing: border-box;
+  border: 2px solid #205dd9;
 }
 
 // 占位元素的样式
 .placeholder {
-    box-sizing: border-box;
-    background-color: #edf2f7;
-    margin: 10px 0;
-    border: 2px dashed #cbd5e0;
+  box-sizing: border-box;
+  background-color: #edf2f7;
+  margin: 10px 0;
+  border: 2px dashed #cbd5e0;
 }

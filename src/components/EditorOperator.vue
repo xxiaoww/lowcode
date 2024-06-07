@@ -9,6 +9,10 @@
         <ElFormItem label="容器高度"
           ><ElInput type="text" v-model="state.editData.height"></ElInput
         ></ElFormItem>
+        <!-- <ElColorPicker
+          label="背景颜色"
+          v-model="state.editData.backgroundColor"
+        ></ElColorPicker> -->
       </div>
     </template>
     <template v-else>
@@ -196,11 +200,11 @@ export default defineComponent({
           ...newStyle,
         };
 
-        let oldBlock = useFocus().focusData.value.focus[0];
+        const oldBlock = useFocus().focusData.value.focus[0];
         // useFocus().focusData.value.focus[0].props.props = state.editData.props;
         let newProps = state.editData.props;
         useFocus().focusData.value.focus[0].props = newProps;
-        let newBlock = useFocus().focusData.value.focus[0];
+        const newBlock = useFocus().focusData.value.focus[0];
         console.log(oldBlock);
         console.log(useFocus().focusData.value.focus[0].props);
 

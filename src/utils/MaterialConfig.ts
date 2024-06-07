@@ -126,13 +126,29 @@ export let registerConfig = createEditorConfig();
 registerConfig.register({
   label: "flex布局",
   preview: () => h(ElInput, { placeholder: "预览输入框" }, ""),
-  render: ({ props = {} }) => h("div", { style: { display: "flex" } }),
+  render: ({ props = {} }) =>
+    h(
+      "div",
+      {
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          width: "50px",
+          height: "49px",
+        },
+      },
+      ""
+    ),
   key: "flex",
   icon: "icon-anniu",
   body: [{ key: "container" }, { key: "container" }, { key: "container" }],
   props: {
     text: createInputProp("文本内容"),
     color: createColorProp("颜色"),
+    flexSetting: createSelectProp("弹性布局设置", [
+      { label: "水平", value: "row" },
+      { label: "垂直", value: "column" },
+    ]),
   },
 });
 // 容器组件
@@ -164,49 +180,25 @@ registerConfig.register({
 registerConfig.register({
   label: "文本",
   preview: () => h("span", {}, "预览文本"),
-  // render: () => h("span", { class: "text" }, "渲染文本"),
-  // render: ({ props = {} }) =>
-  //   h(
-  //     "span",
-  //     {
-  //       style: { color: (props.color = ""), fontSize: (props.size = "") },
-  //       class: "text",
-  //     },
-  //     props.text || "渲染文本"
-  //   ),
   render: ({ props = {} }) => {
-    // if (props.color) {
-    //   alert(props.color);
-    // }
     const { color = "", size = "", text = "渲染文本" } = props;
     return h(
-      "span",
+      // "span",
+      "div",
       {
         style: {
           color,
           fontSize: size,
           "line-height": props.lineHeight,
           "font-weight": props.fontWeight,
+          width: props.width,
+          height: props.height,
         },
         class: "text",
       },
       text
     );
   },
-  // render: ({
-  //   props = {} as { color?: string; size?: string; text?: string },
-  // }) => {
-  //   const { color = "", size = "", text = "渲染文本" } = props;
-  //   return h(
-  //     "span",
-  //     {
-  //       style: { color, fontSize: size },
-  //       class: "text",
-  //     },
-  //     text
-  //   );
-  // },
-
   key: "text",
   icon: "icon-wenben",
   body: [],
@@ -216,6 +208,8 @@ registerConfig.register({
     size: createSelectProp("字体大小", fontSizeOpt),
     lineHeight: createSelectProp("文本行高", lineHeightOpt),
     fontWeight: createSelectProp("文本字重", fontWeightOpt),
+    with: createInputProp("宽度"),
+    height: createInputProp("高度"),
   },
 });
 // 按钮
@@ -278,6 +272,8 @@ registerConfig.register({
           style: {
             color: props.color,
             borderRadius: props.borderRadius || "0px",
+            width: "70px",
+            height: "30px",
           },
         },
         "wrwq"
@@ -298,7 +294,6 @@ registerConfig.register({
     titWeight: createSelectProp("标题字重", fontWeightOpt),
     titLineHeight: createSelectProp("标题行高", lineHeightOpt),
     titColor: createColorProp("标题颜色"),
-    // text: createInputProp("输入框文本"),
     color: createColorProp("颜色"),
     maxLength: createInputProp("最大字数"),
     borderRadius: createSelectProp("圆角", borderRadiusOpt),

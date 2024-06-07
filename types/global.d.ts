@@ -80,6 +80,7 @@ export interface AppData {
   container: {
     width: string;
     height: string;
+    backgroundColor?: string;
   };
   blocks: Block[];
 }
