@@ -150,6 +150,7 @@ export default defineComponent({
       return {
         width: `${useData().state.container.width}px`,
         height: `${useData().state.container.height}px`,
+        backgroundColor: `${useData().state.container.backgroundColor}px`,
       };
     });
     console.log(containerStyle.value);

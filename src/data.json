@@ -1,7 +1,8 @@
 {
     "container": {
         "width": "550",
-        "height": "550"
+        "height": "550",
+        "backgroundColor":""
     },
     "blocks": []
 }
